@@ -1,22 +1,17 @@
-import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
-import Register from "./pages/Register";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Register from './pages/Register';
+import Login from './pages/Login';
+import VerifyAccount from './pages/VerifyAccount';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Navigate to="/register" replace />,
-    errorElement: (
-      <div className="text-center text-red-500 text-xl mt-20">
-        ❌ مسیر پیدا نشد (404)
-      </div>
-    ),
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-]);
+const AppRouter = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/verify" element={<VerifyAccount />} />
+    </Routes>
+  );
+};
 
-export default function AppRouter() {
-  return <RouterProvider router={router} />;
-}
+export default AppRouter;
