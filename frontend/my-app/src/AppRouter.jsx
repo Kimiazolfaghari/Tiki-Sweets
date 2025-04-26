@@ -8,6 +8,7 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Register />} />
+      <Route path="/register" element={<Register />} /> {/* این خط اضافه شده */}
       <Route path="/login" element={<Login />} />
       <Route path="/verify" element={<VerifyAccount />} />
     </Routes>

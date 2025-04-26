@@ -8,7 +8,7 @@ html, body, #root {
 }
 
 /* پس‌زمینه و فرم وسط */
-.register-container {
+.login-container {
   height: 100vh;
   background-color: #FFF6E3;
   display: flex;
@@ -43,8 +43,8 @@ html, body, #root {
 }
 
 /* دایره‌های بلور برای پس‌زمینه */
-.register-container::before,
-.register-container::after {
+.login-container::before,
+.login-container::after {
   content: '';
   position: absolute;
   background-color: rgba(229, 178, 157, 0.5); /* #E5B29D */
@@ -54,14 +54,14 @@ html, body, #root {
   pointer-events: none;
 }
 
-.register-container::before {
+.login-container::before {
   width: 300px;
   height: 300px;
   top: -80px;
   left: -80px;
 }
 
-.register-container::after {
+.login-container::after {
   width: 250px;
   height: 250px;
   bottom: -80px;
@@ -69,7 +69,7 @@ html, body, #root {
 }
 
 /* باکس فرم */
-.register-card {
+.login-card {
   position: relative;
   z-index: 1;
   background-color: #f7fbf9;
@@ -80,13 +80,13 @@ html, body, #root {
 }
 
 /* عنوان‌ها */
-.register-card h2 {
+.login-card h2 {
   font-size: 1.6rem;
   font-weight: 700;
   color: #212529;
 }
 
-.register-card p {
+.login-card p {
   font-size: 0.9rem;
   color: #6c757d;
 }
@@ -106,7 +106,7 @@ html, body, #root {
   box-shadow: 0 0 0 0.2rem rgba(229, 178, 157, 0.25);
 }
 
-/* دکمه ثبت نام */
+/* دکمه لاگین */
 .register-btn {
   background-color: #eac6b6;
   color: white;
@@ -121,13 +121,13 @@ html, body, #root {
   background-color: #dfb2a1;
 }
 
-/* لینک لاگین */
-.login-link {
+/* لینک‌ها */
+.login-link, .forgot-link {
   color: #e8a994;
   font-weight: 500;
   text-decoration: none;
 }
 
-.login-link:hover {
+.login-link:hover, .forgot-link:hover {
   text-decoration: underline;
 }
