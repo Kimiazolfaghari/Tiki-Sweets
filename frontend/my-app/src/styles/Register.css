@@ -108,18 +108,22 @@ html, body, #root {
 
 /* دکمه ثبت نام */
 .register-btn {
-  background-color: #eac6b6;
-  color: white;
+  background-color: #E5B29D;
+  color: #ffffff;
   font-weight: 600;
   border: none;
   border-radius: 0.75rem;
-  height: 48px;
+  height: 42px; /* ارتفاع کمتر */
+  width: 60%; /* دکمه کوچیک‌تر */
+  margin: 0 auto; /* وسط چین کردن */
+  display: block; /* برای اینکه margin:auto جواب بده */
   transition: background 0.3s ease;
 }
 
 .register-btn:hover {
-  background-color: #dfb2a1;
+  background-color: #dca88d; /* یه رنگ یه کم تیره‌تر روی هاور */
 }
+
 
 /* لینک لاگین */
 .login-link {

@@ -2,7 +2,7 @@ import React from 'react';
 
 const SubmitButton = ({ label }) => {
   return (
-    <button type="submit" className="btn register-btn w-100">
+    <button type="submit" className="register-btn">
       {label}
     </button>
   );

@@ -23,21 +23,23 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Registered form data:', form);
+    console.log('✅ Registered form data:', form);
   };
 
   return (
     <div className="register-container w-100">
-      {/* فلش برگشت دایره‌ای */}
+      {/* دکمه برگشت */}
       <button
         onClick={() => navigate(-1)}
         className="back-button"
+        type="button"
       >
         <ArrowLeft size={20} color="#41342A" />
       </button>
 
+      {/* کارت فرم */}
       <div className="register-card shadow">
-        <h2 className="text-center fw-bold">Account Sign Up</h2>
+        <h2 className="text-center fw-bold mb-2">Account Sign Up</h2>
         <p className="text-center text-muted mb-4">Create Account</p>
 
         <form onSubmit={handleSubmit}>
