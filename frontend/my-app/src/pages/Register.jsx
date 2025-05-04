@@ -24,7 +24,11 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('✅ Registered form data:', form);
+  
+    // شبیه‌سازی ثبت‌نام موفق
+    navigate('/verify');
   };
+  
 
   return (
     <div className="register-container w-100">
