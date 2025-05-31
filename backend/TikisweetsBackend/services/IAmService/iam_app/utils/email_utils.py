@@ -4,12 +4,14 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from random import randint
-from iam_app.core.config import settings
-
 
 def send_otp_email(to_email: EmailStr, otp: str):
-    sender_email = settings.SENDER_EMAIL
-    sender_password = settings.SENDER_PASSWORD
+    sender_email = "no-reply@example.com"  # ایمیل فرستنده که نمایش داده میشه
+    smtp_username = "0098678e864681"  # این باید username واقعی SMTP تو باشه
+    smtp_password = "9d15e7806aa59b"  # پسورد SMTP واقعی
+    smtp_host = "sandbox.smtp.mailtrap.io"
+    smtp_port = 587  # یا هر پورتی که می‌خوای از اونها استفاده کنی (25،465،587 یا 2525)
+
     subject = "Your OTP Code"
 
     msg = MIMEMultipart()
@@ -21,13 +23,13 @@ def send_otp_email(to_email: EmailStr, otp: str):
     msg.attach(MIMEText(body, "plain"))
 
     try:
-        server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-        server.login(sender_email, sender_password)
+        server = smtplib.SMTP(smtp_host, smtp_port)
+        server.starttls()
+        server.login(smtp_username, smtp_password)
         server.sendmail(sender_email, to_email, msg.as_string())
         server.quit()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error sending email: {e}")
 
-
 def generate_otp():
-    return str(randint(1000, 9999))
+        return str(randint(1000, 9999))

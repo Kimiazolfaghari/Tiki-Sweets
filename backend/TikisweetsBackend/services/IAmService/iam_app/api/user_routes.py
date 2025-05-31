@@ -21,21 +21,23 @@ def get_db():
 
 @router.post("/register", response_model=UserOut)
 def register(user: UserRegister, db: Session = Depends(get_db)):
-    # Check if the user already exists
-    db_user = crud_users.get_user_by_email(db, email=user.email)
-    if db_user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already registered"
-        )
+    try:
+        db_user = crud_users.get_user_by_email(db, email=user.email)
+        if db_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+
+        new_user = crud_users.create_user(db, user)
+        otp = generate_otp()
+        store_otp(db, user.email, otp)
+        send_otp_email(user.email, otp)
+
+        return new_user
+    except Exception as e:
+        import traceback
+        traceback.print_exc()  # یا لاگ کنید
+        raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
 
 
-    new_user = crud_users.create_user(db, user)
-    otp = generate_otp()
-    store_otp(db, user.email, otp)
-    send_otp_email(user.email, otp)
-
-    return new_user
 
 
 @router.post("/login")
