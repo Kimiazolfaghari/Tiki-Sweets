@@ -1,0 +1,109 @@
+.action-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  padding: 0.6rem 1.5rem !important;
+  border-radius: 30px !important;
+  background: #B9A38C !important;
+  color: #624B3B !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 8px rgba(184, 150, 111, 0.6) !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+  border: none !important;
+  transition: background 0.3s ease, box-shadow 0.3s ease !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* حالت پیش‌فرض: گوشه‌های گرد متوسط، پس‌زمینه قهوه‌ای */
+.action-button--default {
+  background: #B9A38C !important;
+  border-radius: 30px !important;
+}
+
+.action-button--default:hover {
+  background: #F9EDDF !important;
+  box-shadow: 0 6px 12px rgba(158, 125, 85, 0.7) !important;
+}
+
+/* حالت اول: گوشه‌ها کمی گردتر، پس‌زمینه قهوه‌ای */
+.action-button--rounded {
+  background: #b8966f;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(184, 150, 111, 0.6);
+}
+
+.action-button--rounded:hover {
+  background: #9e7d55;
+  box-shadow: 0 6px 10px rgba(158, 125, 85, 0.7);
+}
+
+/* حالت دوم: رنگ روشن‌تر با سایه ملایم، گوشه‌ها گرد */
+.action-button--light {
+  background: #f8efe1;
+  color: #b8966f;
+  border-radius: 30px;
+  box-shadow: 0 4px 8px rgba(184, 150, 111, 0.2);
+}
+
+.action-button--light:hover {
+  background: #e6dccb;
+  box-shadow: 0 6px 12px rgba(184, 150, 111, 0.3);
+}
+
+/* حالت سوم: گوشه‌ها بیشتر گرد شده */
+.action-button--pill {
+  background: #b8966f;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(184, 150, 111, 0.6);
+}
+
+.action-button--pill:hover {
+  background: #9e7d55;
+  box-shadow: 0 6px 12px rgba(158, 125, 85, 0.7);
+}
+
+/* استایل تصویر/آیکون */
+.button-arrow {
+  width: 20px !important;
+  height: 20px !important;
+  margin-left: 0 !important;
+  object-fit: contain !important;
+  transition: transform 0.3s ease !important;
+  flex-shrink: 0 !important;
+}
+
+/* انیمیشن hover برای تصویر */
+.action-button:hover .button-arrow {
+  transform: translateX(5px);
+}
+
+/* حالت فعال/کلیک */
+.action-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 4px rgba(184, 150, 111, 0.4);
+}
+
+/* حالت disabled */
+.action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* برای صفحه نمایش‌های کوچک */
+@media (max-width: 768px) {
+  .action-button {
+    padding: 0.5rem 1.2rem;
+    font-size: 0.9rem;
+  }
+  
+  .button-arrow {
+    width: 18px;
+    height: 18px;
+  }
+}

@@ -1,0 +1,317 @@
+.payment-container {
+  min-height: 100vh;
+  background-color: #FFF6E3;
+  padding: 1rem;
+  position: relative; /* برای کنترل بهتر عناصر absolute */
+  overflow: auto;
+  overflow-x:hidden;
+}
+
+/* دایره‌های بلور برای پس‌زمینه */
+.payment-container::before,
+.payment-container::after {
+  content: '';
+  position: absolute;
+  background-color: rgba(229, 178, 157, 0.5);
+  border-radius: 50%;
+  filter: blur(50px);
+  z-index: 0;
+  pointer-events: none;
+  /* این خط رو اضافه کنید تا از container بیرون نزنن */
+  overflow: hidden;
+}
+
+.payment-container::before {
+  width: 300px;
+  height: 300px;
+  top: -80px;
+  left: -80px;
+}
+
+.payment-container::after {
+  width: 250px;
+  height: 250px;
+  bottom: -80px;
+  right: -80px;
+}
+
+.payment-card {
+  max-width: 64rem;
+  margin: 0 auto;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.payment-content {
+  display: flex;
+}
+
+/* Left Side - Payment Form */
+.payment-form-section {
+  flex: 1;
+  padding: 2rem;
+}
+
+.back-button-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* دکمه برگشت دایره‌ای */
+.back-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: #FFF6E3;
+  border: 1px solid #41342A;
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #f7f2ee;
+}
+
+.back-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #6b7280;
+}
+
+.payment-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #41342A;
+  margin-bottom: 0.5rem;
+}
+
+.payment-description {
+  color: #41342A;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #41342A;
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.form-input:focus {
+  outline: none;
+  ring: 2px;
+  ring-color: #E5B29D;
+  border-color: transparent;
+}
+
+.cardholder-input {
+  background-color: #FEFBF8;
+}
+
+.card-input-container {
+  position: relative;
+}
+
+
+.card-icons {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 0.25rem;
+}
+
+.mastercard-red {
+  width: 1.5rem;
+  height: 1rem;
+  background-color: #E5B29D;
+  border-radius: 0.125rem;
+}
+
+.mastercard-yellow {
+  width: 1.5rem;
+  height: 1rem;
+  background-color: #E5B29D;
+  border-radius: 0.125rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.discount-container {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.discount-input {
+  flex: 1;
+}
+
+.apply-button {
+  padding: 0.75rem 1.5rem;
+  color: #E5B29D;
+  font-weight: 500;
+  background: none;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.apply-button:hover {
+  background-color: #fef7ed;
+}
+
+.pay-button {
+  width: 100%;
+  background-color: #E5B29D;
+  color: white;
+  font-weight: 500;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.pay-button:hover {
+  background-color:rgb(232, 165, 139);
+}
+
+/* Right Side - Order Summary */
+.order-summary {
+  width: 20rem;
+  background-color: #f3f4f6;
+  padding: 2rem;
+}
+
+.payment-amount {
+  margin-bottom: 1.5rem;
+}
+
+.amount-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.amount-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-name {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.item-price {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.order-total {
+  border-top: 1px solid #d1d5db;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-label {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.total-price {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.final-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.final-label {
+  color: #1f2937;
+}
+
+.final-price {
+  color: #1f2937;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .payment-content {
+    flex-direction: column;
+  }
+  
+  .order-summary {
+    width: 100%;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

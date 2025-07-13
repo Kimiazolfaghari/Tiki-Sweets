@@ -1,0 +1,91 @@
+.promo-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FFF6E3;
+  padding: 40px 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+.promo-text {
+  flex: 2;
+  text-align: center;
+  max-width: 600px;
+  white-space: nowrap;
+}
+
+.promo-text h2 {
+  color: #CD85A5;
+  font-size: 2.8em;
+  font-weight: 300;
+  margin-bottom: 15px;
+  line-height: 1.2;
+}
+
+.promo-text p {
+  color: #B85D7A;
+  font-size: 1.3em;
+  margin-bottom: 30px;
+  line-height: 1.4;
+  white-space: nowrap;
+  font-weight: 400;
+
+}
+
+.promo-text p strong {
+  color: #FF4E9C;
+  font-weight: 400;
+}
+
+.promo-image {
+  flex: 0.8;
+  text-align: right;
+  position: relative;
+  margin-left: 30px;
+}
+
+.promo-image img {
+  width: 280px;
+  height: auto;
+}
+
+
+.promo-text,
+.promo-image {
+  position: relative;
+  z-index: 1;
+}
+
+.order-button {
+  color: #624B3B;  /* تغییر رنگ متن به قهوه‌ای */
+
+}
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .promo-container {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  
+  .promo-text {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  .promo-text h2 {
+    font-size: 2.2em;
+  }
+  
+  .promo-image img {
+    width: 280px;
+  }
+  
+  .promo-container::before {
+    display: none;
+  }
+}

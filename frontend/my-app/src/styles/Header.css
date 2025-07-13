@@ -1,0 +1,317 @@
+.header {
+  height: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #fff3e4;
+  font-family: 'Arial', sans-serif;
+  gap: 10rem;
+  position: relative;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo img {
+  height: 200px;
+  width: auto;
+}
+
+.nav-links {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.2rem;
+  max-width: 500px;
+  flex-grow: 0;
+}
+
+.nav-links a {
+  margin: 0 0.5rem;
+  font-size: 0.9rem;
+  color: #8b6d5c;
+  text-decoration: none;
+}
+
+.nav-links a:hover {
+  color: #d99a89;
+}
+
+.header-icons {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.header-icons .icon {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.header-icons .icon:hover {
+  opacity: 0.7;
+}
+
+/* Styling for the Search Icon Button */
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #8b6d5c;
+}
+
+.icon-btn:hover {
+  color: #d99a89;
+}
+
+/* Styling for the search bar */
+.search-bar {
+  position: absolute; /* یا relative اگر بخواهید جعبه در جریان باشد */
+  transform: translateX(-50%);
+  width: 400px;
+  top: 25px; /* قرار دادن جعبه در وسط */
+  left: 53%; /* قرار دادن در وسط صفحه */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  border-radius: 25px;
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+
+.search-input {
+  width: 100%;
+  padding: 12px 50px 12px 20px;
+  font-size: 16px;
+  color: #8b6d5c;
+  background-color: #ffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 25px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.search-input::placeholder {
+  color: #a0a0a0;
+}
+
+.search-input:focus {
+  border-color: #d99a89;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(217, 154, 137, 0.3);
+}
+
+.search-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.search-button:hover {
+  background-color: rgba(217, 154, 137, 0.2);
+}
+
+.search-icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  color: #624B3B;
+}
+
+/* استایل منوی کاربر */
+.user-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: linear-gradient(135deg, #fff 0%, #fef7f0 100%);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(255, 138, 76, 0.15), 0 0 0 1px rgba(255, 165, 0, 0.05);
+  min-width: 180px;
+  z-index: 1000;
+  margin-top: 12px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  padding: 8px 0;
+}
+
+.user-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid #fff;
+  filter: drop-shadow(0 -2px 4px rgba(255, 138, 76, 0.1));
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  color: #8B4513;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 2px 20px;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(135deg, #FF8C42 0%, #FF6B35 100%);
+  color: white;
+  transform: translateX(5px);
+  padding-left: 25px;
+}
+
+.dropdown-item:active {
+  transform: translateX(3px) scale(0.98);
+}
+
+/* رنگ هاور منو به رنگ صورتی تغییر داده شده */
+.dropdown-item:hover {
+  background: linear-gradient(135deg, #E5B29D 0%, #E5A18A 100%); /* تغییر رنگ هاور */
+  color: white;
+  transform: translateX(5px);
+  padding-left: 25px;
+}
+
+.dropdown-item.logout:hover {
+  background: linear-gradient(135deg, #E5B29D 0%, #E5A18A 100%); /* تغییر رنگ هاور برای گزینه logout */
+  color: white;
+}
+
+
+.dropdown-item span {
+  margin-left: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg,rgb(230, 190, 165) 0%,rgb(196, 138, 117) 100%);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.dropdown-item:hover::before {
+  transform: scaleY(1);
+}
+
+.dropdown-item.logout::before {
+  background: linear-gradient(135deg,rgb(195, 153, 123) 0%,rgb(231, 196, 161) 100%);
+}
+
+/* انیمیشن برای ظاهر شدن منو */
+.user-dropdown {
+  animation: slideInDown 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* افکت شیشه‌ای */
+.user-dropdown {
+  background: rgba(255, 248, 240, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 165, 0, 0.2);
+}
+
+/* Responsive design برای منوی کاربر */
+@media (max-width: 768px) {
+  .user-dropdown {
+    right: -10px;
+    min-width: 160px;
+    margin-top: 8px;
+  }
+  
+  .dropdown-item {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .dropdown-item:hover {
+    transform: translateX(3px);
+    padding-left: 20px;
+  }
+}
+/* Responsive design */
+@media (max-width: 768px) {
+  .header {
+    gap: 2rem;
+    padding: 1rem;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .search-bar {
+    width: 300px;
+    padding: 10px;
+  }
+  
+  .search-input {
+    font-size: 14px;
+    padding: 10px 45px 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    gap: 1rem;
+  }
+  
+  .logo img {
+    height: 120px;
+  }
+  
+  .search-bar {
+    width: 250px;
+  }
+}

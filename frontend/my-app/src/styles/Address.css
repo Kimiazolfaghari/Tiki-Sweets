@@ -1,0 +1,113 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.address-container {
+  height: 100vh;
+  background-color: #FFF6E3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.back-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: #FFF6E3;
+  border: 1px solid #41342A;
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #f7f2ee;
+}
+
+.address-container::before,
+.address-container::after {
+  content: '';
+  position: absolute;
+  background-color: rgba(229, 178, 157, 0.5);
+  border-radius: 50%;
+  filter: blur(50px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.address-container::before {
+  width: 300px;
+  height: 300px;
+  top: -80px;
+  left: -80px;
+}
+
+.address-container::after {
+  width: 250px;
+  height: 250px;
+  bottom: -80px;
+  right: -80px;
+}
+
+.address-card {
+  position: relative;
+  z-index: 1;
+  background-color: #f7fbf9;
+  padding: 2rem;
+  border-radius: 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.address-card h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.address-card p {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.custom-input {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  height: 45px;
+  font-size: 0.95rem;
+  border: 1px solid #dee2e6;
+  transition: border 0.2s;
+}
+
+.custom-input:focus {
+  border-color: #e5b29d;
+  box-shadow: 0 0 0 0.2rem rgba(229, 178, 157, 0.25);
+}
+
+.submit-btn {
+  background-color: #eac6b6;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.75rem;
+  height: 48px;
+  transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #dfb2a1;
+}

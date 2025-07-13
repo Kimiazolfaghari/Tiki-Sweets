@@ -1,0 +1,182 @@
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+.hero-section {
+  position: relative;
+  background-color: #fff3e4;
+  padding: 2rem 5rem 6rem 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100px; /* برای اطمینان از ارتفاع مناسب */
+}
+
+.hero-section::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; /* حذف فاصله ناخواسته */
+  left: 0;
+  width: 100%;
+  height: 250px; /* ارتفاع موج بهینه */
+  background-image: url("/img/wave.png");
+  background-size: 100% 100%; /* کشیده شدن کامل موج */
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  z-index: 1; /* موج روی محتوا باشد */
+  pointer-events: none; /* جلوگیری از تداخل با کلیک‌ها */
+}
+
+.hero-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 4rem;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 800px;
+  z-index: 2; /* محتوا روی موج باشد */
+  position: relative;
+  opacity: 0;  /* ابتدا مخفی است */
+  transition: opacity 1s ease-in-out; /* انیمیشن فید این */
+  transform: translateY(-40px); /* بالا بردن کلیت محتوا */
+
+}
+
+.hero-main.fade-in {
+  opacity: 1; /* به تدریج نمایان می‌شود */
+}
+
+.hero-text {
+  flex: 1 1 300px;
+  max-width: 50%;
+  color: #AD8162;
+  margin: 0 auto;
+}
+
+.hero-text h2 {
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  color: #d99a89;
+}
+
+.hero-text h3 {
+  font-weight: 400;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+  color: #e6b9ac;
+}
+
+.hero-text p {
+  font-size: 1rem;
+  color: #a67666;
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+.hero-image {
+  flex: 1 1 300px;
+  max-width: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-image img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.hero-features {
+  display: flex;
+  justify-content: space-around;
+  gap: 3rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  flex-wrap: wrap;
+  z-index: 2; /* محتوا روی موج باشد */
+  position: relative;
+}
+
+.feature-card {
+  flex: 1 1 200px;
+  max-width: 200px;
+  text-align: center;
+  color: #8b6d5c;
+  margin-bottom: 2rem;
+}
+
+.feature-icon {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1rem;
+}
+
+/* Responsive Design برای موبایل و تبلت */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 1rem 2rem 4rem 2rem;
+  }
+  
+  .hero-section::after {
+    height: 80px; /* ارتفاع کمتر برای موبایل */
+  }
+  
+  .hero-main {
+    gap: 2rem;
+  }
+  
+  .hero-text {
+    max-width: 100%;
+  }
+  
+  .hero-text h2 {
+    font-size: 1.8rem;
+  }
+  
+  .hero-text h3 {
+    font-size: 1.3rem;
+  }
+  
+  .hero-features {
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 1rem 1rem 3rem 1rem;
+  }
+  
+  .hero-section::after {
+    height: 60px; /* ارتفاع کمتر برای موبایل کوچک */
+  }
+  
+  .hero-main {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .hero-text h2 {
+    font-size: 1.5rem;
+  }
+  
+  .hero-text h3 {
+    font-size: 1.1rem;
+  }
+  
+  .hero-features {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+}

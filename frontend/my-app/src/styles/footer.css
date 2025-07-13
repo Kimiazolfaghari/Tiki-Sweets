@@ -1,0 +1,240 @@
+/* Footer.css */
+.footer {
+  background-color: #fef7ed;
+  padding: 24px 16px; /* کاهش padding بالا و پایین */
+  font-family: 'Arial', sans-serif;
+  min-height: auto; /* حذف ارتفاع حداقل */
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Logo and Social Section */
+.footer-top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 0px;
+  border-bottom: 2px solid #ffff;
+  height:120px;
+}
+
+.footer-logo-section {
+  flex: 1;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 0;
+}
+
+.logo-image {
+  height: 200px; /* اندازه مناسب لوگو */
+  width: auto;
+}
+
+/* Social Media */
+.footer-social {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* برای تراز عمودی */
+  justify-content: center; /* برای تراز افقی */
+  text-align: center;
+}
+
+.social-title {
+  color: #624B3B;
+  font-weight: 500;
+  margin-bottom: 0; /* حذف فاصله پایین */
+  font-size: 16px;
+  margin-right: 20px; /* فاصله دادن به آیکون‌ها */
+}
+
+.social-icons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  background: #624B3B;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.social-icon:hover {
+  background-color: #B9A38C;
+}
+
+.social-icon img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
+/* Contact Info */
+.footer-contact {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 2px solid #ffff;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+
+.contact-item {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-icon {
+  width: 60px;
+  height: 60px;
+  background: #624B3B;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.contact-icon:hover{
+  background-color: #B9A38C;
+
+}
+
+.contact-icon img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+}
+
+.contact-title {
+  color: #624B3B;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-size: 16px;
+  margin: 0 0 8px 0;
+}
+
+.contact-email {
+  color: #624B3B;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Navigation Links */
+.footer-nav {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.nav-link {
+  color: #624B3B;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+  font-weight: 400;
+}
+
+
+
+/* Copyright */
+.footer-copyright {
+  text-align: center;
+  border-top: 2px solid #ffff;
+  padding-top: 20px;
+}
+
+.copyright-text {
+  color: #624B3B;
+  font-size: 12px;
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer {
+    padding: 32px 16px 20px 16px;
+  }
+  
+  .footer-top-section {
+    flex-direction: column;
+    text-align: center;
+    gap: 32px;
+  }
+  
+  .footer-social {
+    text-align: center;
+  }
+  
+  .social-icons {
+    justify-content: center;
+  }
+  
+  .footer-contact {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  
+  .footer-nav {
+    gap: 24px;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .social-icons {
+    gap: 12px;
+  }
+  
+  .contact-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .contact-icon img {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-nav {
+    gap: 16px;
+  }
+  
+  .social-icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .social-icon img {
+    width: 16px;
+    height: 16px;
+  }
+}

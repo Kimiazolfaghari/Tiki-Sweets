@@ -1,0 +1,250 @@
+/* Cart.css */
+
+.cart-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Header Styles */
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.back-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: #FFF6E3;
+  border: 1px solid #41342A;
+  border-radius: 50%;
+  padding: 0.5rem;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #f7f2ee;
+}
+
+.cart-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #41342A;
+  justify-content:center;
+}
+
+.header-spacer {
+  width: 40px;
+}
+
+/* Cart Items Styles */
+.cart-items {
+  padding: 24px 16px;
+  background-color: #ffffff;
+  margin-top: 1px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+
+.cart-item.with-border {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f3f4f6;
+  flex-shrink: 0;
+  margin-right:100px;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-name {
+  font-weight: 500;
+  color: #111827;
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 0 0 4px 0;
+}
+
+.item-price {
+  color: #41342A;
+  font-size: 15px;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Quantity Controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.quantity-button {
+  width: 32px;
+  height: 32px;
+  border: 2px solid #d1d5db;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.quantity-button:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.quantity-display {
+  width: 24px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111827;
+}
+
+/* Delete Button */
+.delete-button {
+  padding: 6px 16px;
+  background-color: #41342A;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+  background-color: #744a35;
+}
+
+/* Subtotal Section */
+.cart-subtotal {
+  padding: 24px 16px;
+  background-color: #ffffff;
+  margin-top: 1px;
+}
+
+.subtotal-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap:5px;
+}
+
+.subtotal-label {
+  color: #41342A;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.subtotal-amount {
+  font-size: 16px;
+  font-weight: 600;
+  color: #41342A;
+}
+
+/* Checkout Section */
+.checkout-section {
+  padding: 24px 16px;
+  background-color: #ffffff;
+}
+
+.checkout-button {
+  width: 100%;
+  background-color: #E5B29D;
+  border: none;
+  padding: 16px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #ffff;
+  transition: background-color 0.2s;
+}
+
+.checkout-button:hover {
+  background-color:rgb(230, 163, 137);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .cart-container {
+    max-width: 100%;
+  }
+
+  .cart-header {
+    padding: 16px 12px;
+  }
+
+  .cart-items {
+    padding: 20px 12px;
+  }
+
+  .cart-item {
+    gap: 12px;
+  }
+
+  .item-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .quantity-controls {
+    gap: 8px;
+  }
+
+  .quantity-button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .quantity-display {
+    width: 20px;
+    font-size: 14px;
+  }
+
+  .cart-subtotal,
+  .checkout-section {
+    padding: 20px 12px;
+  }
+}
