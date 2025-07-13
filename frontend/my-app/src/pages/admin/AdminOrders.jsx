@@ -1,58 +1,62 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Eye, Edit } from 'lucide-react';
 
-const mockOrders = [
-  { id: 1001, customer: 'Mehdi Rezaei', total: 250, status: 'Processing' },
-  { id: 1002, customer: 'Elham Sharifi', total: 470, status: 'Delivered' },
-  { id: 1003, customer: 'Sara Mohammadi', total: 320, status: 'Cancelled' },
-];
-
-const AdminOrders = () => {
-  const [orders, setOrders] = useState([]);
-
-  useEffect(() => {
-    setOrders(mockOrders);
-  }, []);
-
+const AdminOrders = ({ orders }) => {
   return (
     <div>
-      <h2 style={{ marginBottom: '1rem' }}>Order Management</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: '#fff' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th style={thStyle}>Order ID</th>
-            <th style={thStyle}>Customer</th>
-            <th style={thStyle}>Total ($)</th>
-            <th style={thStyle}>Status</th>
-            <th style={thStyle}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map(order => (
-            <tr key={order.id} style={{ textAlign: 'center' }}>
-              <td style={tdStyle}>{order.id}</td>
-              <td style={tdStyle}>{order.customer}</td>
-              <td style={tdStyle}>{order.total}</td>
-              <td style={tdStyle}>{order.status}</td>
-              <td style={tdStyle}>
-                <button onClick={() => alert(`View order ${order.id}`)}>🔍</button>
-                <button onClick={() => alert(`Change status of ${order.id}`)}>⚙️</button>
-              </td>
+      <div className="content-header">
+        <h1 className="page-title">Order Management</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <select className="form-input" style={{ width: 'auto' }}>
+            <option>All Status</option>
+            <option>Processing</option>
+            <option>Delivered</option>
+            <option>Cancelled</option>
+          </select>
+        </div>
+      </div>
+      
+      <div className="table-container">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td style={{ fontWeight: '500' }}>#{order.id}</td>
+                <td>{order.customer}</td>
+                <td style={{ fontWeight: '600' }}>${order.total}</td>
+                <td>
+                  <span className={`status-badge status-${order.status.toLowerCase()}`}>
+                    {order.status}
+                  </span>
+                </td>
+                <td>{order.date}</td>
+                <td>
+                  <div className="action-buttons">
+                    <button className="action-btn view">
+                      <Eye style={{ width: '1rem', height: '1rem' }} />
+                    </button>
+                    <button className="action-btn edit">
+                      <Edit style={{ width: '1rem', height: '1rem' }} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-};
-
-const thStyle = {
-  padding: '0.75rem',
-  border: '1px solid #ddd',
-};
-
-const tdStyle = {
-  padding: '0.5rem',
-  border: '1px solid #ddd',
 };
 
 export default AdminOrders;
