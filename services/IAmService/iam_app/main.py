@@ -12,6 +12,7 @@ from core_app.api.shipments_routes import  shipment_router
 from core_app.api.discount_routes import  dis_router
 from core_app.api.locations_routes import  location_router
 from core_app.api.special_cake import  special_cake_router
+from media_app.api.media_routes import router as media_router
 
 app = FastAPI()
 
@@ -40,6 +41,7 @@ app.include_router(shipment_router, prefix="/shipment", tags=["shipment"])
 app.include_router(dis_router,prefix="/discount", tags=["discount"])
 app.include_router(location_router,prefix="/location", tags=["location"])
 app.include_router(special_cake_router,prefix="/َSpecialCake", tags=["َSpecialCake"])
+app.include_router(media_router, prefix="/media", tags=["Media"])
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
