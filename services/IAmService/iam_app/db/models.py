@@ -25,6 +25,7 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    image_url = Column(String, nullable=True)
 
 
 class Admin(Base):
@@ -34,6 +35,7 @@ class Admin(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    image_url = Column(String, nullable=True)
 
 
 class Product(Base):
@@ -44,7 +46,7 @@ class Product(Base):
     description = Column(String)
     price = Column(Float, nullable=False)
     avg_rating = Column(Float)
-
+    image_url = Column(String, nullable=True)
 
 
 class RateComment(Base):
@@ -56,6 +58,7 @@ class RateComment(Base):
     date = Column(DateTime(timezone=True), server_default=func.now())
     comment = Column(String)
     rate_number = Column(Integer, nullable=False)
+    image_url = Column(String, nullable=True)
 
 
 class City(Base):
@@ -126,6 +129,7 @@ class SpecialCake(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     estimated_price = Column(Float)
     status = Column(String)
+    image_url = Column(String, nullable=True)
 
 
 class OrderStatus(str, enum.Enum):
