@@ -1,5 +1,7 @@
+from datetime import datetime
+from uuid import  uuid4
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import Boolean, Column, DateTime, Enum, Float, ForeignKey, String, Integer
-from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from iam_app.db.base import Base
 import enum
@@ -47,6 +49,18 @@ class Product(Base):
     price = Column(Float, nullable=False)
     avg_rating = Column(Float)
     image_url = Column(String, nullable=True)
+
+class MediaFile(Base):
+    __tablename__ = "media_files"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    filename = Column(String, unique=True, nullable=False)
+    original_filename = Column(String)
+    size = Column(Integer)
+    content_type = Column(String)
+    uploaded_at = Column(DateTime, default=datetime.utcnow)
+    uploader_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    admin_uploader_id = Column(Integer, ForeignKey("admins.id"), nullable=True)
 
 
 class RateComment(Base):

@@ -1,6 +1,8 @@
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
+
 from iam_app.api.admin_routes import admin_router
 from iam_app.api.user_routes import router
 from core_app.api.products_routes import products_router
@@ -16,6 +18,29 @@ from media_app.api.media_routes import router as media_router
 
 app = FastAPI()
 
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="Tikisweets Media API",
+        version="1.0.0",
+        description="API for uploading and managing media files",
+        routes=app.routes,
+    )
+    openapi_schema["components"]["securitySchemes"] = {
+        "BearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
+    }
+    for path in openapi_schema["paths"].values():
+        for method in path.values():
+            method.setdefault("security", []).append({"BearerAuth": []})
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
 origins = [
     "http://localhost",
     "http://localhost:5174",
