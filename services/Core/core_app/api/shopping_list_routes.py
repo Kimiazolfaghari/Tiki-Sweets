@@ -71,8 +71,6 @@ def delete_item(
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
 
-    # چک کردن مالکیت آیتم اگر لازم بود (می‌تونی این قسمت رو اضافه کنی)
-    # برای سادگی فرض می‌کنیم فقط خود کاربر می‌تواند حذف کند و این چک باید انجام شود
 
     return
 

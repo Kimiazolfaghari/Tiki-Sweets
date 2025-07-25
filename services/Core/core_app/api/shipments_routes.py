@@ -4,7 +4,7 @@ from typing import List
 from services.Core.core_app.schemas import shipment_schemas
 from services.Core.core_app.crud import shipments as crud_shipment
 from services.Core.core_app.db.session import  SessionLocal
-from services.Core.core_app.core.security import get_current_admin  # فقط ادمین میتونه اینارو مدیریت کنه
+from services.Core.core_app.core.security import get_current_admin
 
 router = APIRouter(
     prefix="/shipments",

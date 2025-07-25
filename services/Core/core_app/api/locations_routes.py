@@ -73,7 +73,6 @@ def delete_city(
     return None
 
 
-# --------- Location Routes ---------
 
 @router.post("/", response_model=LocationOut, status_code=status.HTTP_201_CREATED)
 def create_location(

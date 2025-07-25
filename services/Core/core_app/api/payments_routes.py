@@ -21,8 +21,7 @@ def create_payment(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user)
 ):
-    # بررسی مالکیت سفارش (order) در create_payment موجود نیست، پس اینجا خودمان چک می‌کنیم
-    # ابتدا سفارش را از DB بگیریم
+
     from core_app.crud import order as crud_order
     order = crud_order.get_order(db, payment_in.order_id)
     if not order:
@@ -46,7 +45,7 @@ def get_payment(
     if not payment:
         raise HTTPException(status_code=404, detail="Payment not found")
 
-    order_user_id = payment.order.user_id  # فرض بر این است که رابطه order در مدل Payment تعریف شده است
+    order_user_id = payment.order.user_id
     if current_user["id"] != order_user_id and admin is None:
         raise HTTPException(status_code=403, detail="Not enough permissions")
 

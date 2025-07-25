@@ -80,7 +80,7 @@ def delete_discount(
 def validate_discount_code(
     code: str,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),  # احراز هویت کاربر عادی
+    current_user: dict = Depends(get_current_user),
 ):
     discount = crud_discount.get_discount_by_code(db, code)
     if not discount:

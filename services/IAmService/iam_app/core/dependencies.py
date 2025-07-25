@@ -1,6 +1,5 @@
 from fastapi import Depends, HTTPException
 from fastapi.params import Security
-from fastapi.security import HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 from services.IAmService.iam_app.core.security import SECRET_KEY, ALGORITHM
 from fastapi.security.api_key import APIKeyHeader

@@ -16,7 +16,7 @@ async def read_own_profile(current_admin: dict = Depends(get_current_admin)):
     admin_id = current_admin.get("id")
     token = current_admin.get("token")
 
-    print(f"admin_id: {admin_id}, type: {type(admin_id)}")  # اینجا چاپ کن
+    print(f"admin_id: {admin_id}, type: {type(admin_id)}")
 
     if admin_id is None:
         raise HTTPException(status_code=400, detail="admin_id is None in token payload")
