@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from iam_app.db.session import SessionLocal
-from core_app.crud import payments as crud
-from core_app.schemas import payment_schemas as schemas
-from iam_app.core.dependencies import get_current_user
+from core_app.schemas.payment_schemas import PaymentCreate, PaymentOut, PaymentUpdate
+from core_app.crud import payments as crud_payment
+from core_app.db.session import SessionLocal
+from core_app.core.security import get_current_user, get_current_admin
 
-payment_router = APIRouter()
+router = APIRouter(prefix="/payments", tags=["payments"])
+
 
 def get_db():
     db = SessionLocal()
@@ -14,38 +15,52 @@ def get_db():
     finally:
         db.close()
 
-@payment_router.post("/", response_model=schemas.PaymentOut)
+@router.post("/", response_model=PaymentOut, status_code=status.HTTP_201_CREATED)
 def create_payment(
-    payment: schemas.PaymentCreate,
+    payment_in: PaymentCreate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user=Depends(get_current_user)
 ):
-    user_id = current_user.get("user_id") or current_user.get("sub")
-    return crud.create_payment(db, payment, user_id=user_id)
+    # بررسی مالکیت سفارش (order) در create_payment موجود نیست، پس اینجا خودمان چک می‌کنیم
+    # ابتدا سفارش را از DB بگیریم
+    from core_app.crud import order as crud_order
+    order = crud_order.get_order(db, payment_in.order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
 
-@payment_router.get("/{payment_id}", response_model=schemas.PaymentOut)
-def read_payment(
+    if order.user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not allowed to pay for orders of other users")
+
+    payment = crud_payment.create_payment(db, payment_in)
+    return payment
+
+
+@router.get("/{payment_id}", response_model=PaymentOut)
+def get_payment(
     payment_id: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user=Depends(get_current_user),
+    admin=Depends(get_current_admin)
 ):
-    payment = crud.get_payment(db, payment_id)
+    payment = crud_payment.get_payment(db, payment_id)
     if not payment:
         raise HTTPException(status_code=404, detail="Payment not found")
 
-    if current_user["role"] != "admin" and payment.user_id != int(current_user.get("user_id", current_user.get("sub"))):
-        raise HTTPException(status_code=403, detail="Not authorized")
+    order_user_id = payment.order.user_id  # فرض بر این است که رابطه order در مدل Payment تعریف شده است
+    if current_user["id"] != order_user_id and admin is None:
+        raise HTTPException(status_code=403, detail="Not enough permissions")
 
     return payment
 
-@payment_router.patch("/{payment_id}", response_model=schemas.PaymentOut)
-def update_payment(
-    payment_id: int,
-    update_data: schemas.PaymentUpdate,
-    db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
-):
-    if current_user["role"] != "admin":
-        raise HTTPException(status_code=403, detail="Admins only")
 
-    return crud.update_payment_status(db, payment_id, update_data)
+@router.patch("/{payment_id}", response_model=PaymentOut)
+def update_payment_status(
+    payment_id: int,
+    update_data: PaymentUpdate,
+    db: Session = Depends(get_db),
+    admin=Depends(get_current_admin),
+):
+    payment = crud_payment.update_payment_status(db, payment_id, update_data)
+    if not payment:
+        raise HTTPException(status_code=404, detail="Payment not found")
+    return payment

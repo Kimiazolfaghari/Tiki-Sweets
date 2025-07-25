@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 class ProductBase(BaseModel):
@@ -8,9 +10,12 @@ class ProductBase(BaseModel):
 class ProductCreate(ProductBase):
     pass
 
-class ProductOut(ProductBase):
+class ProductOut(BaseModel):
     id: int
-    avg_rating: float
+    name: str
+    description: str
+    price: float
+    avg_rating: Optional[float] = None
 
 class Config:
     from_attributes = True

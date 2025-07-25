@@ -1,12 +1,11 @@
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from iam_app.core.dependencies import get_current_user
 from iam_app.core.security import create_access_token
 from iam_app.crud import users as crud_users
 from iam_app.db import session as db_session
 from iam_app.db.models import OTP, User
-from iam_app.schemas.user_schemas import UserLogin, UserOut, UserRegister
+from iam_app.schemas.user_schemas import UserLogin, UserOut, UserRegister, UserUpdate
 from iam_app.utils.email_utils import send_otp_email, generate_otp
 from iam_app.crud.users import store_otp
 
@@ -49,7 +48,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
             detail="Invalid credentials"
         )
 
-    access_token = create_access_token(data={"sub": db_user.email, "role": "user"})
+    access_token = create_access_token(data={"sub": db_user.email, "id": db_user.id, "role": "user"})
     return {
         "access_token": access_token,
         "token_type": "bearer",
@@ -58,7 +57,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 
 
 @router.post("/users/verify-otp")
-def verify_otp(email: str, otp: str, db: Session = Depends(get_db), OTP_EXPIRATION_MINUTES=5):
+def verify_otp(email: str, otp: str, db: Session = Depends(get_db), OTP_EXPIRATION_MINUTES:int=5):
     db_otp = db.query(OTP).filter(OTP.email == email).order_by(OTP.created_at.desc()).first()
 
     if not db_otp or db_otp.otp != otp:
@@ -67,7 +66,7 @@ def verify_otp(email: str, otp: str, db: Session = Depends(get_db), OTP_EXPIRATI
             detail="Invalid OTP"
         )
 
-    if datetime.utcnow().replace(tzinfo=timezone.utc) - db_otp.created_at > timedelta(minutes=OTP_EXPIRATION_MINUTES):
+    if datetime.utcnow().replace(tzinfo=timezone.utc) - db_otp.created_at > timedelta(minutes=int(OTP_EXPIRATION_MINUTES)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="OTP expired"
@@ -85,16 +84,9 @@ def verify_otp(email: str, otp: str, db: Session = Depends(get_db), OTP_EXPIRATI
             detail="User not found"
         )
 
-
-@router.get("/users/profile", response_model=UserOut)
-def get_profile(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
-    email = current_user.get("sub")
-    if not email:
-        raise HTTPException(status_code=400, detail="Invalid token payload")
-
-    user = crud_users.get_user_by_email(db, email)
+@router.get("/users/{user_id}", response_model=UserOut)
+def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-
     return user
-

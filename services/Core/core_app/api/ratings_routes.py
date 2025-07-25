@@ -1,10 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from typing import List
 from core_app.schemas.rating_schemas import RateCommentCreate, RateCommentOut
-from core_app.crud.ratings import create_rate_comment, get_comments_by_product
-from iam_app.db.session import SessionLocal
+from core_app.crud import ratings as crud_rating
+from core_app.db.session import SessionLocal
+from core_app.core.security import get_current_user
 
-ratings_router = APIRouter()
+router = APIRouter(
+    prefix="/ratings",
+    tags=["ratings"]
+)
 
 def get_db():
     db = SessionLocal()
@@ -13,10 +18,23 @@ def get_db():
     finally:
         db.close()
 
-@ratings_router.post("/", response_model=RateCommentOut)
-def create_rating(rate: RateCommentCreate, db: Session = Depends(get_db)):
-    return create_rate_comment(db, rate)
+@router.post("/", response_model=RateCommentOut, status_code=status.HTTP_201_CREATED)
+def create_rate_comment(
+        rate_in: RateCommentCreate,
+        db: Session = Depends(get_db),
+        current_user=Depends(get_current_user)
+):
+    if rate_in.user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized to rate as another user")
 
-@ratings_router.get("/{product_id}", response_model=list[RateCommentOut])
-def get_product_ratings(product_id: int, db: Session = Depends(get_db)):
-    return get_comments_by_product(db, product_id)
+    rate = crud_rating.create_rate_comment(db, rate_in)
+    return rate
+
+
+@router.get("/product/{product_id}", response_model=List[RateCommentOut])
+def get_comments_for_product(
+        product_id: int,
+        db: Session = Depends(get_db)
+):
+    comments = crud_rating.get_comments_by_product(db, product_id)
+    return comments

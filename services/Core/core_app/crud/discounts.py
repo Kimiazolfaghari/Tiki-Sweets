@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from iam_app.db.models import DiscountCode
+from core_app.db.models import DiscountCode
 from core_app.schemas import discount_schemas
 from fastapi import HTTPException
 

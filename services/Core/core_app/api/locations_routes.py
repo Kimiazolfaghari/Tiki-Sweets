@@ -1,11 +1,14 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from iam_app.db.session import SessionLocal
-from core_app.schemas import location_schemas
-from core_app.crud import locations as crud
-from iam_app.core.dependencies import get_current_admin, get_current_active_user_or_admin
+from typing import List, Optional
+from core_app.db.session import SessionLocal
+from core_app.schemas.location_schemas import (
+    CityCreate, CityOut, LocationCreate, LocationOut, LocationUpdate, CityBase)
+from core_app.crud import locations as crud_location
+from core_app.core.security import get_current_admin, get_current_user
 
-location_router = APIRouter()
+router = APIRouter(prefix="/locations", tags=["locations"])
+
 
 def get_db():
     db = SessionLocal()
@@ -14,106 +17,115 @@ def get_db():
     finally:
         db.close()
 
-
-@location_router.post("/cities/", response_model=location_schemas.CityOut)
+@router.post("/cities/", response_model=CityOut, status_code=status.HTTP_201_CREATED)
 def create_city(
-    city: location_schemas.CityCreate,
+    city_in: CityCreate,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin=Depends(get_current_admin),
 ):
-    return crud.create_city(db, city)
+    return crud_location.create_city(db, city_in)
 
-@location_router.get("/cities/{city_id}", response_model=location_schemas.CityOut)
+
+@router.get("/cities/", response_model=List[CityOut])
+def read_cities(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user),
+):
+    return crud_location.get_all_cities(db, skip=skip, limit=limit)
+
+
+@router.get("/cities/{city_id}", response_model=CityOut)
 def read_city(
     city_id: int,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_active_user_or_admin)
+    user=Depends(get_current_user),
 ):
-    city = crud.get_city(db, city_id)
+    city = crud_location.get_city(db, city_id)
     if not city:
         raise HTTPException(status_code=404, detail="City not found")
     return city
 
-@location_router.get("/cities/", response_model=list[location_schemas.CityOut])
-def list_cities(
-    skip: int = 0,
-    limit: int = 100,
-    db: Session = Depends(get_db),
-    _: dict = Depends(get_current_active_user_or_admin)
-):
-    return crud.get_all_cities(db, skip, limit)
 
-@location_router.patch("/cities/{city_id}", response_model=location_schemas.CityOut)
+@router.put("/cities/{city_id}", response_model=CityOut)
 def update_city(
     city_id: int,
-    update_data: location_schemas.CityCreate,
+    city_in: CityBase,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin=Depends(get_current_admin),
 ):
-    city = crud.update_city(db, city_id, update_data)
-    if not city:
+    updated_city = crud_location.update_city(db, city_id, city_in)
+    if not updated_city:
         raise HTTPException(status_code=404, detail="City not found")
-    return city
+    return updated_city
 
-@location_router.delete("/cities/{city_id}", response_model=location_schemas.CityOut)
+
+@router.delete("/cities/{city_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_city(
     city_id: int,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin=Depends(get_current_admin),
 ):
-    city = crud.delete_city(db, city_id)
-    if not city:
+    deleted_city = crud_location.delete_city(db, city_id)
+    if not deleted_city:
         raise HTTPException(status_code=404, detail="City not found")
-    return city
+    return None
 
 
-@location_router.post("/", response_model=location_schemas.LocationOut)
+# --------- Location Routes ---------
+
+@router.post("/", response_model=LocationOut, status_code=status.HTTP_201_CREATED)
 def create_location(
-    location: location_schemas.LocationCreate,
+    location_in: LocationCreate,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin=Depends(get_current_admin),
 ):
-    return crud.create_location(db, location)
+    return crud_location.create_location(db, location_in)
 
-@location_router.get("/{location_id}", response_model=location_schemas.LocationOut)
-def read_location(
-    location_id: int,
-    db: Session = Depends(get_db),
-    _: dict = Depends(get_current_active_user_or_admin)
-):
-    location = crud.get_location(db, location_id)
-    if not location:
-        raise HTTPException(status_code=404, detail="Location not found")
-    return location
 
-@location_router.get("/", response_model=list[location_schemas.LocationOut])
-def list_locations(
+@router.get("/", response_model=List[LocationOut])
+def read_locations(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_active_user_or_admin)
+    user=Depends(get_current_user),
 ):
-    return crud.get_all_locations(db, skip, limit)
+    return crud_location.get_all_locations(db, skip=skip, limit=limit)
 
-@location_router.patch("/{location_id}", response_model=location_schemas.LocationOut)
-def update_location(
+
+@router.get("/{location_id}", response_model=LocationOut)
+def read_location(
     location_id: int,
-    update_data: location_schemas.LocationUpdate,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    user=Depends(get_current_user),
 ):
-    location = crud.update_location(db, location_id, update_data)
+    location = crud_location.get_location(db, location_id)
     if not location:
         raise HTTPException(status_code=404, detail="Location not found")
     return location
 
-@location_router.delete("/{location_id}", response_model=location_schemas.LocationOut)
+
+@router.put("/{location_id}", response_model=LocationOut)
+def update_location(
+    location_id: int,
+    location_in: LocationUpdate,
+    db: Session = Depends(get_db),
+    admin=Depends(get_current_admin),
+):
+    updated_location = crud_location.update_location(db, location_id, location_in)
+    if not updated_location:
+        raise HTTPException(status_code=404, detail="Location not found")
+    return updated_location
+
+
+@router.delete("/{location_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_location(
     location_id: int,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin=Depends(get_current_admin),
 ):
-    location = crud.delete_location(db, location_id)
-    if not location:
+    deleted_location = crud_location.delete_location(db, location_id)
+    if not deleted_location:
         raise HTTPException(status_code=404, detail="Location not found")
-    return location
+    return None

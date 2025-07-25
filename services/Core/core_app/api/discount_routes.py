@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from iam_app.db.session import SessionLocal
-from core_app.schemas import discount_schemas
-from core_app.crud import discounts as crud
-from iam_app.core.dependencies import get_current_admin, get_current_user, get_current_active_user_or_admin
+from typing import List
+from core_app.schemas.discount_schemas import DiscountCreate, DiscountUpdate, DiscountOut
+from core_app.db.session import SessionLocal
+from core_app.crud import discounts as crud_discount
+from core_app.core.security import get_current_admin, get_current_user
 
-dis_router = APIRouter()
+router = APIRouter(prefix="/discounts", tags=["discounts"])
 
 def get_db():
     db = SessionLocal()
@@ -14,56 +15,81 @@ def get_db():
     finally:
         db.close()
 
-@dis_router.post("/", response_model=discount_schemas.DiscountOut)
+@router.post("/", response_model=DiscountOut, status_code=status.HTTP_201_CREATED)
 def create_discount(
-    discount: discount_schemas.DiscountCreate,
+    discount_in: DiscountCreate,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin: dict = Depends(get_current_admin),
 ):
-    existing = crud.get_discount_by_code(db, discount.code)
+    existing = crud_discount.get_discount_by_code(db, discount_in.code)
     if existing:
         raise HTTPException(status_code=400, detail="Discount code already exists")
-    return crud.create_discount(db, discount)
-
-@dis_router.get("/{discount_id}", response_model=discount_schemas.DiscountOut)
-def read_discount(
-    discount_id: int,
-    db: Session = Depends(get_db),
-    _: dict = Depends(get_current_active_user_or_admin)
-):
-    discount = crud.get_discount(db, discount_id)
-    if not discount:
-        raise HTTPException(status_code=404, detail="Discount not found")
+    discount = crud_discount.create_discount(db, discount_in)
     return discount
 
-@dis_router.get("/", response_model=list[discount_schemas.DiscountOut])
-def list_discounts(
+
+@router.get("/", response_model=List[DiscountOut])
+def read_all_discounts(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin: dict = Depends(get_current_admin),
 ):
-    return crud.get_all_discounts(db, skip, limit)
+    discounts = crud_discount.get_all_discounts(db, skip=skip, limit=limit)
+    return discounts
 
-@dis_router.patch("/{discount_id}", response_model=discount_schemas.DiscountOut)
-def update_discount(
+
+@router.get("/{discount_id}", response_model=DiscountOut)
+def read_discount(
     discount_id: int,
-    update_data: discount_schemas.DiscountUpdate,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin: dict = Depends(get_current_admin),
 ):
-    discount = crud.update_discount(db, discount_id, update_data)
+    discount = crud_discount.get_discount(db, discount_id)
     if not discount:
         raise HTTPException(status_code=404, detail="Discount not found")
     return discount
 
-@dis_router.delete("/{discount_id}", response_model=discount_schemas.DiscountOut)
+
+@router.put("/{discount_id}", response_model=DiscountOut)
+def update_discount(
+    discount_id: int,
+    discount_in: DiscountUpdate,
+    db: Session = Depends(get_db),
+    admin: dict = Depends(get_current_admin),
+):
+    updated_discount = crud_discount.update_discount(db, discount_id, discount_in)
+    if not updated_discount:
+        raise HTTPException(status_code=404, detail="Discount not found")
+    return updated_discount
+
+
+@router.delete("/{discount_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_discount(
     discount_id: int,
     db: Session = Depends(get_db),
-    _: dict = Depends(get_current_admin)
+    admin: dict = Depends(get_current_admin),
 ):
-    discount = crud.delete_discount(db, discount_id)
-    if not discount:
+    deleted_discount = crud_discount.delete_discount(db, discount_id)
+    if not deleted_discount:
         raise HTTPException(status_code=404, detail="Discount not found")
+    return None
+
+
+@router.get("/validate/{code}", response_model=DiscountOut)
+def validate_discount_code(
+    code: str,
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user),  # احراز هویت کاربر عادی
+):
+    discount = crud_discount.get_discount_by_code(db, code)
+    if not discount:
+        raise HTTPException(status_code=404, detail="Discount code not found")
+
+    if hasattr(discount, "is_expired") and discount.is_expired():
+        raise HTTPException(status_code=400, detail="Discount code expired")
+
+    if hasattr(discount, "usage_limit_reached") and discount.usage_limit_reached():
+        raise HTTPException(status_code=400, detail="Discount code usage limit reached")
+
     return discount

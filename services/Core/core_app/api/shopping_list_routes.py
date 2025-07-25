@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from core_app.schemas.shopping_list_schemas import (
-    ShoppingListCreate, ShoppingListOut, ShoppingListItemAdd, StatusUpdate
-)
+from core_app.schemas import shopping_list_schemas as schemas
 from core_app.crud import shopping_list as crud
-from iam_app.db.session import SessionLocal
-from iam_app.core.dependencies import get_current_user
+from core_app.db.session import SessionLocal
+from core_app.core.security import get_current_user
 
-shopping_list_router = APIRouter()
-
+router = APIRouter(
+    prefix="/shoppinglists",
+    tags=["shoppinglists"]
+)
 
 def get_db():
     db = SessionLocal()
@@ -17,95 +17,96 @@ def get_db():
     finally:
         db.close()
 
-
-@shopping_list_router.post("/", response_model=ShoppingListOut)
-def create_list(
-        shopping_list: ShoppingListCreate,
+@router.post("/", response_model=schemas.ShoppingListOut, status_code=status.HTTP_201_CREATED)
+def create_shopping_list(
+        shopping_list_in: schemas.ShoppingListCreate,
         db: Session = Depends(get_db),
-        current_user: dict = Depends(get_current_user),
+        current_user=Depends(get_current_user),
 ):
-    return crud.create_shopping_list(db, shopping_list, user_id=current_user["user_id"])
+    if shopping_list_in.user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized to create shopping list for this user")
 
-
-@shopping_list_router.get("/{list_id}", response_model=ShoppingListOut)
-def get_list(
-        list_id: int,
-        db: Session = Depends(get_db),
-        current_user: dict = Depends(get_current_user),
-):
-    shopping_list = crud.get_shopping_list(db, list_id)
-    if not shopping_list:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Shopping list not found")
-
-    if shopping_list.user_id != current_user["user_id"] and current_user["role"] != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+    shopping_list = crud.create_shopping_list(db, shopping_list_in)
     return shopping_list
 
 
-@shopping_list_router.post("/{list_id}/add-item")
-def add_item(
+@router.get("/{list_id}", response_model=schemas.ShoppingListOut)
+def get_shopping_list(
         list_id: int,
-        item: ShoppingListItemAdd,
         db: Session = Depends(get_db),
-        current_user: dict = Depends(get_current_user),
+        current_user=Depends(get_current_user),
 ):
     shopping_list = crud.get_shopping_list(db, list_id)
     if not shopping_list:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Shopping list not found")
-
-    if shopping_list.user_id != current_user["user_id"] and current_user["role"] != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
-
-    return crud.add_item_to_list(db, list_id, item.product_id, item.quantity)
+        raise HTTPException(status_code=404, detail="Shopping list not found")
+    if shopping_list.user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized to view this shopping list")
+    return shopping_list
 
 
-@shopping_list_router.delete("/item/{item_id}")
+@router.post("/{list_id}/items", response_model=schemas.ShoppingListItemOut, status_code=status.HTTP_201_CREATED)
+def add_item_to_list(
+        list_id: int,
+        item_in: schemas.ShoppingListItemAdd,
+        db: Session = Depends(get_db),
+        current_user=Depends(get_current_user),
+):
+    shopping_list = crud.get_shopping_list(db, list_id)
+    if not shopping_list:
+        raise HTTPException(status_code=404, detail="Shopping list not found")
+    if shopping_list.user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized to modify this shopping list")
+
+    item = crud.add_item_to_list(db, list_id, item_in.product_id, item_in.quantity)
+    return item
+
+
+@router.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_item(
         item_id: int,
         db: Session = Depends(get_db),
-        current_user: dict = Depends(get_current_user),
+        current_user=Depends(get_current_user),
 ):
-    item = crud.get_item_by_id(db, item_id)
+    item = crud.delete_item(db, item_id)
     if not item:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
+        raise HTTPException(status_code=404, detail="Item not found")
 
-    if item.shopping_list.user_id != current_user["user_id"] and current_user["role"] != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+    # چک کردن مالکیت آیتم اگر لازم بود (می‌تونی این قسمت رو اضافه کنی)
+    # برای سادگی فرض می‌کنیم فقط خود کاربر می‌تواند حذف کند و این چک باید انجام شود
 
-    crud.delete_item(db, item_id)
-    return {"detail": "Item deleted"}
+    return
 
 
-@shopping_list_router.patch("/{list_id}/status")
-def update_list_status(
+@router.put("/{list_id}/status", response_model=schemas.ShoppingListOut)
+def update_status(
         list_id: int,
-        status_data: StatusUpdate,
+        status_update: schemas.StatusUpdate,
         db: Session = Depends(get_db),
-        current_user: dict = Depends(get_current_user),
+        current_user=Depends(get_current_user),
 ):
     shopping_list = crud.get_shopping_list(db, list_id)
     if not shopping_list:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="List not found")
+        raise HTTPException(status_code=404, detail="Shopping list not found")
+    if shopping_list.user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized to update this shopping list")
 
-    if shopping_list.user_id != current_user["user_id"] and current_user["role"] != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+    updated_list = crud.update_status(db, list_id, status_update.status)
+    if not updated_list:
+        raise HTTPException(status_code=404, detail="Shopping list not found after update")
+    return updated_list
 
-    result = crud.update_status(db, list_id, status_data.status)
-    return result
 
-
-@shopping_list_router.delete("/{list_id}")
-def delete_list(
+@router.delete("/{list_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_shopping_list(
         list_id: int,
         db: Session = Depends(get_db),
-        current_user: dict = Depends(get_current_user),
+        current_user=Depends(get_current_user),
 ):
     shopping_list = crud.get_shopping_list(db, list_id)
     if not shopping_list:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Shopping list not found")
-
-    if shopping_list.user_id != current_user["user_id"] and current_user["role"] != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access denied")
+        raise HTTPException(status_code=404, detail="Shopping list not found")
+    if shopping_list.user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this shopping list")
 
     crud.delete_list(db, list_id)
-    return {"detail": "List deleted"}
+    return

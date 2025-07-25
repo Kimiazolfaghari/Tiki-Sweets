@@ -1,6 +1,6 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from iam_app.db.models import RateComment,Product
+from core_app.db.models import RateComment,Product
 from core_app.schemas.rating_schemas import RateCommentCreate
 
 def create_rate_comment(db: Session, rate: RateCommentCreate):

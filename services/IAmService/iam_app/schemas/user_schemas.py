@@ -21,7 +21,12 @@ class UserOut(BaseModel):
     phone: str
     created_at: datetime
 
-    class Config:
+class UserUpdate(BaseModel):
+    full_name: str | None = None
+    password: str | None = None
+    phone: str | None = None
+
+class Config:
         from_attributes = True
 
 

@@ -1,13 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from iam_app.db.session import SessionLocal
-from core_app.schemas.special_cake import SpecialCakeCreate, SpecialCakeOut, SpecialCakeUpdateStatus
-from core_app.crud import special_cake as crud_special
-from iam_app.core.dependencies import get_current_user, get_current_admin
+from core_app.db.session import SessionLocal
+from core_app.schemas import special_cake as schemas
+from core_app.crud import special_cake as crud
+from core_app.core.security import get_current_user, get_current_admin
 
-special_cake_router = APIRouter()
-
+router = APIRouter(
+    prefix="/specialcakes",
+    tags=["specialcakes"]
+)
 
 def get_db():
     db = SessionLocal()
@@ -16,64 +18,72 @@ def get_db():
     finally:
         db.close()
 
-
-@special_cake_router.post("/", response_model=SpecialCakeOut)
+@router.post("/", response_model=schemas.SpecialCakeOut, status_code=status.HTTP_201_CREATED)
 def create_special_cake(
-    special_cake_data: SpecialCakeCreate,
+    cake_in: schemas.SpecialCakeCreate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user=Depends(get_current_user),
 ):
-    return crud_special.create_special_cake(db, special_cake_data, user_id=current_user["user_id"])
+    special_cake = crud.create_special_cake(db, cake_in, user_id=current_user["id"])
+    return special_cake
 
 
-@special_cake_router.get("/my", response_model=List[SpecialCakeOut])
-def get_my_special_cakes(
+@router.get("/user", response_model=List[schemas.SpecialCakeOut])
+def get_user_special_cakes(
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user=Depends(get_current_user),
 ):
-    return crud_special.get_user_special_cakes(db, user_id=current_user["user_id"])
+    cakes = crud.get_user_special_cakes(db, current_user["id"])
+    return cakes
 
-
-@special_cake_router.get("/", response_model=List[SpecialCakeOut])
+@router.get("/", response_model=List[schemas.SpecialCakeOut])
 def get_all_special_cakes(
     db: Session = Depends(get_db),
-    current_admin: dict = Depends(get_current_admin),
+    current_admin=Depends(get_current_admin),
 ):
-    return crud_special.get_all_special_cakes(db)
+    return crud.get_all_special_cakes(db)
 
-
-@special_cake_router.get("/{cake_id}", response_model=SpecialCakeOut)
+@router.get("/{cake_id}", response_model=schemas.SpecialCakeOut)
 def get_special_cake_by_id(
     cake_id: int,
     db: Session = Depends(get_db),
-    current_admin: dict = Depends(get_current_admin),
+    current_user=Depends(get_current_user),
 ):
-    special_cake = crud_special.get_special_cake_by_id(db, cake_id)
-    if not special_cake:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Special cake not found")
-    return special_cake
+    cake = crud.get_special_cake_by_id(db, cake_id)
+    if not cake:
+        raise HTTPException(status_code=404, detail="Special cake not found")
+    if ("id" in current_user and cake.user_id != current_user["id"]) and (not hasattr(current_user, "role") or current_user.get("role") != "admin"):
+        raise HTTPException(status_code=403, detail="Not authorized to view this special cake")
+    return cake
 
 
-@special_cake_router.put("/{cake_id}/status", response_model=SpecialCakeOut)
+@router.patch("/{cake_id}/status", response_model=schemas.SpecialCakeOut)
 def update_special_cake_status(
     cake_id: int,
-    status_data: SpecialCakeUpdateStatus,
+    status_update: schemas.SpecialCakeUpdateStatus,
     db: Session = Depends(get_db),
-    current_admin: dict = Depends(get_current_admin),
+    current_admin=Depends(get_current_admin),
 ):
-    special_cake = crud_special.update_special_cake_status(db, cake_id, new_status=status_data.status)
-    if not special_cake:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Special cake not found")
-    return special_cake
+    updated_cake = crud.update_special_cake_status(db, cake_id, status_update.status)
+    if not updated_cake:
+        raise HTTPException(status_code=404, detail="Special cake not found")
+    return updated_cake
 
 
-@special_cake_router.delete("/{cake_id}")
+@router.delete("/{cake_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_special_cake(
     cake_id: int,
     db: Session = Depends(get_db),
-    current_admin: dict = Depends(get_current_admin),
+    current_user=Depends(get_current_user),
 ):
-    success = crud_special.delete_special_cake(db, cake_id)
+    cake = crud.get_special_cake_by_id(db, cake_id)
+    if not cake:
+        raise HTTPException(status_code=404, detail="Special cake not found")
+    if cake.user_id != current_user["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this special cake")
+    success = crud.delete_special_cake(db, cake_id)
     if not success:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Special cake not found")
-    return {"detail": "Deleted successfully"}
+        raise HTTPException(status_code=500, detail="Failed to delete special cake")
+    return
+
+

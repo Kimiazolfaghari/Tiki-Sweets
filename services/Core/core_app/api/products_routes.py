@@ -1,11 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from typing import List
 from core_app.schemas.product_schemas import ProductCreate, ProductOut
-from core_app.crud import products as crud_products
-from iam_app.db.session import SessionLocal
-from iam_app.core.dependencies import get_current_user
+from core_app.crud import products as crud_product
+from core_app.db.session import SessionLocal
+from core_app.core.security import get_current_admin
 
-products_router = APIRouter()
+router = APIRouter(
+    prefix="/products",
+    tags=["products"]
+)
 
 def get_db():
     db = SessionLocal()
@@ -14,37 +18,37 @@ def get_db():
     finally:
         db.close()
 
-@products_router.post("/", response_model=ProductOut)
+@router.post("/", response_model=ProductOut, status_code=status.HTTP_201_CREATED)
 def create_product(
-    product: ProductCreate,
+    product_in: ProductCreate,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    admin=Depends(get_current_admin)
 ):
-    if current_user.get("role") != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
-    return crud_products.create_product(db, product)
+    product = crud_product.create_product(db, product_in)
+    return product
 
-@products_router.get("/", response_model=list[ProductOut])
-def read_all_products(db: Session = Depends(get_db)):
-    return crud_products.get_all_products(db)
 
-@products_router.get("/{product_id}", response_model=ProductOut)
-def read_product(product_id: int, db: Session = Depends(get_db)):
-    product = crud_products.get_product_by_id(db, product_id)
+@router.get("/", response_model=List[ProductOut])
+def list_products(db: Session = Depends(get_db)):
+    products = crud_product.get_all_products(db)
+    return products
+
+
+@router.get("/{product_id}", response_model=ProductOut)
+def get_product(product_id: int, db: Session = Depends(get_db)):
+    product = crud_product.get_product_by_id(db, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     return product
 
-@products_router.delete("/{product_id}")
+
+@router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_product(
     product_id: int,
     db: Session = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    admin=Depends(get_current_admin)
 ):
-    if current_user.get("role") != "admin":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required")
-
-    product = crud_products.delete_product(db, product_id)
+    product = crud_product.delete_product(db, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
-    return {"message": "Product deleted successfully"}
+    return

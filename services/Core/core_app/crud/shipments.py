@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from iam_app.db.models import Shipment
+from core_app.db.models import Shipment
 from core_app.schemas import shipment_schemas
 
 def create_shipment(db: Session, shipment: shipment_schemas.ShipmentCreate):

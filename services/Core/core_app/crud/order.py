@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from iam_app.db.models import Order, OrderDetail
+from core_app.db.models import Order, OrderDetail
 
 def create_order(db: Session, order_data, user_id: int):
     order = Order(

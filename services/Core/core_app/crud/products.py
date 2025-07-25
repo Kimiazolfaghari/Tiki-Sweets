@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from iam_app.db.models import Product
+from core_app.db.models import Product
 from core_app.schemas.product_schemas import ProductCreate
 
 def create_product(db: Session, product_in: ProductCreate) -> Product:

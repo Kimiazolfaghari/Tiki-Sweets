@@ -1,14 +1,12 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import Union
+from typing import List
 from core_app.schemas.order_schemas import OrderCreate, OrderOut
-from core_app.crud import order as crud
-from iam_app.db.session import SessionLocal
-from iam_app.core.dependencies import get_current_active_user_or_admin
-from iam_app.schemas.user_schemas import UserOut
-from iam_app.schemas.admin_schemas import AdminOut
+from core_app.crud import order as crud_order
+from core_app.db.session import SessionLocal
+from core_app.core.security import get_current_user, get_current_admin
 
-order_router = APIRouter()
+router = APIRouter(prefix="/orders", tags=["orders"])
 
 def get_db():
     db = SessionLocal()
@@ -17,42 +15,55 @@ def get_db():
     finally:
         db.close()
 
-@order_router.post("/", response_model=OrderOut)
+@router.post("/", response_model=OrderOut, status_code=status.HTTP_201_CREATED)
 def create_order(
-    order: OrderCreate,
+    order_in: OrderCreate,
     db: Session = Depends(get_db),
-    current_user: UserOut = Depends(get_current_active_user_or_admin),
+    current_user=Depends(get_current_user)
 ):
-    if hasattr(current_user, "role") and current_user.role == "admin":
-        raise HTTPException(status_code=403, detail="Admins cannot create orders")
-    return crud.create_order(db, order, user_id=current_user.id)
+    user_id = current_user["id"]
 
-@order_router.get("/{order_id}", response_model=OrderOut)
-def read_order(
-    order_id: int,
-    db: Session = Depends(get_db),
-    current_user: Union[UserOut, AdminOut] = Depends(get_current_active_user_or_admin),
-):
-    db_order = crud.get_order(db, order_id)
-    if not db_order:
-        raise HTTPException(status_code=404, detail="Order not found")
+    if order_in.user_id != user_id:
+        raise HTTPException(status_code=403, detail="Not allowed to create order for other users")
 
-    if hasattr(current_user, "role") and current_user.role == "admin":
-        return db_order
+    order = crud_order.create_order(db, order_in, user_id)
+    return order
 
-    if db_order.user_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Access denied")
 
-    return db_order
-
-@order_router.get("/", response_model=list[OrderOut])
+@router.get("/", response_model=List[OrderOut])
 def read_orders(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
-    current_user: Union[UserOut, AdminOut] = Depends(get_current_active_user_or_admin),
+    admin=Depends(get_current_admin)
 ):
-    if hasattr(current_user, "role") and current_user.role == "admin":
-        return crud.get_all_orders(db, skip=skip, limit=limit)
-    else:
-        return crud.get_orders_by_user(db, user_id=current_user.id, skip=skip, limit=limit)
+    return crud_order.get_all_orders(db, skip=skip, limit=limit)
+
+
+@router.get("/me", response_model=List[OrderOut])
+def read_my_orders(
+    skip: int = 0,
+    limit: int = 100,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
+):
+    user_id = current_user["id"]
+    return crud_order.get_orders_by_user(db, user_id=user_id, skip=skip, limit=limit)
+
+
+@router.get("/{order_id}", response_model=OrderOut)
+def read_order(
+    order_id: int,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+    admin=Depends(get_current_admin)
+):
+    order = crud_order.get_order(db, order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    user_id = current_user["id"]
+    if (order.user_id != user_id) and (admin is None):
+        raise HTTPException(status_code=403, detail="Not enough permissions")
+
+    return order

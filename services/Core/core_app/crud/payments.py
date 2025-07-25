@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from iam_app.db.models import Payment, PaymentStatus, DiscountCode, Order, OrderStatus
+from core_app.db.models import Payment, PaymentStatus, DiscountCode, Order, OrderStatus
 from core_app.schemas.payment_schemas import PaymentCreate, PaymentUpdate
 from fastapi import HTTPException
 from datetime import datetime
