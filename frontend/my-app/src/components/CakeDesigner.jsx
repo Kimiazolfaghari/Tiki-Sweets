@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import {useNavigate} from "react-router-dom";
 import ActionButton from './ActionButton';
 import '../styles/CakeDesigner.css';
 
 const CakeDesigner = () => {
+  const navigate = useNavigate();
+
+
   const [selectedOptions, setSelectedOptions] = useState({
     spongeFlavor: '',
     fillingType: '',
@@ -26,7 +30,7 @@ const CakeDesigner = () => {
 
   const handleContinue = () => {
     console.log('Selected options:', selectedOptions);
-    // Handle form submission here
+    navigate('/PaymentForm');
   };
 
   const OptionButton = ({ category, value, children }) => (

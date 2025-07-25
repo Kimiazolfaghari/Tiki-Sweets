@@ -1,6 +1,6 @@
 // ProfilePage.jsx
 import React from 'react';
-import ProfilePage from '../components/Profile.jsx'; // یا هر مسیری که فایل شما در آن است
+import ProfilePage from '../components/Profile.jsx'; 
 
 const App = () => {
   return (

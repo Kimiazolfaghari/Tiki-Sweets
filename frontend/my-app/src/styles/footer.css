@@ -182,41 +182,41 @@
   .footer {
     padding: 32px 16px 20px 16px;
   }
-  
+
   .footer-top-section {
     flex-direction: column;
     text-align: center;
-    gap: 32px;
+    gap: 24px;
+    height: auto; /* حذف ارتفاع ثابت برای انعطاف */
   }
-  
+
   .footer-social {
+    justify-content: center;
     text-align: center;
   }
-  
-  .social-icons {
-    justify-content: center;
-  }
-  
-  .footer-contact {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-  
-  .footer-nav {
-    gap: 24px;
-    flex-direction: column;
-    align-items: center;
-  }
-  
+
   .social-icons {
     gap: 12px;
   }
-  
+
+  .footer-contact {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
   .contact-icon {
     width: 50px;
     height: 50px;
   }
-  
+
   .contact-icon img {
     width: 20px;
     height: 20px;
@@ -225,14 +225,14 @@
 
 @media (max-width: 480px) {
   .footer-nav {
-    gap: 16px;
+    gap: 12px;
   }
-  
+
   .social-icon {
     width: 36px;
     height: 36px;
   }
-  
+
   .social-icon img {
     width: 16px;
     height: 16px;

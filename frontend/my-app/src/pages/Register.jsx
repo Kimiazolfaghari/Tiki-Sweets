@@ -5,14 +5,13 @@ import InputField from '../components/InputField';
 import SubmitButton from '../components/SubmitButton';
 import ErrorMessage from '../components/ErrorMessage';
 import '../styles/register.css';
-// import { registerUser } from '../services/authApi.js';  
 
 const Register = () => {
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
-    username: '',
     password: '',
     phone: '',
     email: '',
@@ -31,29 +30,39 @@ const Register = () => {
     setLoading(true);
 
     try {
-      // ارسال داده‌ها به بک‌اند
-      await registerUser({
-        email: form.email,
-        password: form.password,
-        // اگه بک‌اند اسکیمای بیشتر می‌خواد مثل firstName یا phone، اونا رو هم اضافه کن
+      const response = await fetch('http://127.0.0.1:8000/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          full_name: `${form.firstName} ${form.lastName}`,
+          email: form.email,
+          password: form.password,
+          phone: form.phone,
+        }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Registration failed');
+      }
+
+      // ✅ ذخیره ایمیل برای استفاده در صفحه Verify
+      localStorage.setItem('emailForOTP', form.email);
+
       setLoading(false);
-      // هدایت به صفحه تایید کد OTP
       navigate('/verify');
+
     } catch (err) {
       setLoading(false);
-      setError(err.response?.data?.detail || 'خطا در ثبت‌نام');
+      setError(err.message || 'Registration error');
     }
   };
 
   return (
     <div className="register-container w-100">
-      <button
-        onClick={() => navigate(-1)}
-        className="back-button"
-        type="button"
-      >
+      <button onClick={() => navigate(-1)} className="back-button" type="button">
         <ArrowLeft size={20} color="#41342A" />
       </button>
 
@@ -62,19 +71,47 @@ const Register = () => {
         <p className="text-center text-muted mb-4">Create Account</p>
 
         <form onSubmit={handleSubmit}>
-          <InputField name="firstName" placeholder="First Name" value={form.firstName} onChange={handleChange} />
-          <InputField name="lastName" placeholder="Last Name" value={form.lastName} onChange={handleChange} />
-          <InputField name="username" placeholder="Username" value={form.username} onChange={handleChange} />
-          <InputField type="password" name="password" placeholder="Password" value={form.password} onChange={handleChange} />
-          <InputField type="tel" name="phone" placeholder="Phone Number" value={form.phone} onChange={handleChange} />
-          <InputField type="email" name="email" placeholder="Email Address" value={form.email} onChange={handleChange} />
+          <InputField
+            name="firstName"
+            placeholder="First Name"
+            value={form.firstName}
+            onChange={handleChange}
+          />
+          <InputField
+            name="lastName"
+            placeholder="Last Name"
+            value={form.lastName}
+            onChange={handleChange}
+          />
+          <InputField
+            type="tel"
+            name="phone"
+            placeholder="Phone Number"
+            value={form.phone}
+            onChange={handleChange}
+          />
+          <InputField
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            value={form.email}
+            onChange={handleChange}
+          />
+          <InputField
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+          />
 
           {error && <ErrorMessage message={error} />}
-          <SubmitButton label={loading ? "Registering..." : "Sign Up"} />
+          <SubmitButton label={loading ? 'Registering...' : 'Sign Up'} disabled={loading} />
         </form>
 
         <p className="text-center mt-3 small">
-          Already Have An Account? <a href="/login" className="login-link">Log In</a>
+          Already Have An Account?{' '}
+          <a href="/login" className="login-link">Log In</a>
         </p>
       </div>
     </div>

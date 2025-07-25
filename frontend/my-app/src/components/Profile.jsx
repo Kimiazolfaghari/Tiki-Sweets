@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, X } from 'lucide-react';
 import '../styles/profile.css';
+import avatarImage from '../../img/profile.jpg';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -20,7 +21,6 @@ const ProfilePage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Profile updated:', profile);
-    // اینجا می‌توانید API call برای ذخیره اطلاعات اضافه کنید
   };
 
   return (
@@ -44,7 +44,7 @@ const ProfilePage = () => {
 
         {/* آواتار */}
         <img
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+          src={avatarImage}
           alt="Profile Avatar"
           className="profile-avatar"
         />

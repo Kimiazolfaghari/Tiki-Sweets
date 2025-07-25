@@ -33,7 +33,7 @@ const ProductCard = ({ product, onBuyClick }) => {
         <img src={product.image} alt={product.name} />
       </div>
       
-      <div className="product-info">
+      <div className="product-card-info">
         <h3 className="product-title">{product.name}</h3>
         <p className="product-price">${product.price}</p>
         

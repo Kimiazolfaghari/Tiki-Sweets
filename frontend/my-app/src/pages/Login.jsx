@@ -16,36 +16,52 @@ const Login = () => {
     rememberMe: false,
   });
 
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+    setLoading(true);
 
-    // Dummy users for testing
-    const dummyAdmin = {
-      email: 'admin@example.com',
-      name: 'Admin',
-      isAdmin: true,
-    };
+    try {
+      const response = await fetch('http://127.0.0.1:8000/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+        }),
+      });
 
-    const dummyUser = {
-      email: 'user@example.com',
-      name: 'Regular User',
-      isAdmin: false,
-    };
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Login failed');
+      }
 
-    const currentUser =
-      form.email === dummyAdmin.email ? dummyAdmin : dummyUser;
+      const data = await response.json();
 
-    login(currentUser);
+      // ذخیره توکن در context و optional: localStorage
+      login({
+        token: data.access_token,
+        email: form.email,
+        isAdmin: data.is_admin || false,
+      });
 
-    if (currentUser.isAdmin) {
-      navigate('/admin');
-    } else {
-      navigate('/profile');
+      // انتقال به مسیر مناسب
+      navigate(data.is_admin ? '/admin' : '/');
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Login error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,7 +104,9 @@ const Login = () => {
             <a href="#" className="forgot-link">Forgot Password?</a>
           </div>
 
-          <SubmitButton label="Log In" />
+          {error && <div className="text-danger text-center mb-2">{error}</div>}
+
+          <SubmitButton label={loading ? 'Logging in...' : 'Log In'} disabled={loading} />
         </form>
 
         <p className="text-center mt-3 small">

@@ -5,10 +5,23 @@ const ScrollToTop = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // برای اطمینان از اینکه DOM کامل لود شده
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'auto' });
-    }, 0);
+    // فوری اسکرول کن
+    window.scrollTo(0, 0);
+    
+    // اگر صفحه هنوز لود نشده، کمی صبر کن
+    const handleScroll = () => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    // اجرای فوری
+    handleScroll();
+    
+    // اجرای با تاخیر کوتاه
+    const timer = setTimeout(handleScroll, 0);
+    
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   return null;

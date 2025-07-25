@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Minus, Plus } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // اضافه کردن useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import '../styles/Cart.css';
 
 const DessertCart = () => {
-  const navigate = useNavigate(); // استفاده از useNavigate
+  const navigate = useNavigate(); 
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -124,9 +124,14 @@ const DessertCart = () => {
 
       {/* Checkout Button */}
       <div className="checkout-section">
-        <button className="checkout-button">
+        <button
+          className="checkout-button"
+          onClick={() => navigate('/PaymentForm')}
+        >
           Checkout
         </button>
+
+
       </div>
     </div>
   );

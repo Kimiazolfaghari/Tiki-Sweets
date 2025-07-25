@@ -45,7 +45,7 @@ const Header = () => {
         <nav className="menu-nav">
           <ul className="menu-list">
             <li className="menu-item">
-              <Link to="/home" className="menu-link" onClick={closeMenu}>Home</Link>
+              <Link to="/" className="menu-link" onClick={closeMenu}>Home</Link>
             </li>
             <li className="menu-item">
               <Link to="/ProductListing" className="menu-link" onClick={closeMenu}>Product</Link>
@@ -54,10 +54,10 @@ const Header = () => {
               <Link to="/customcake" className="menu-link" onClick={closeMenu}>Custom Order</Link>
             </li>
             <li className="menu-item">
-              <Link to="/Home" className="menu-link" onClick={closeMenu}>About</Link>
+              <Link to="/" className="menu-link" onClick={closeMenu}>About</Link>
             </li>
             <li className="menu-item">
-              <Link to="/Home" className="menu-link" onClick={closeMenu}>Contact</Link>
+              <Link to="/" className="menu-link" onClick={closeMenu}>Contact</Link>
             </li>
           </ul>
         </nav>

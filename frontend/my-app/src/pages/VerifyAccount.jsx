@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import InputField from '../components/InputField';
@@ -9,17 +9,54 @@ import '../styles/verifyAccount.css';
 const VerifyAccount = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const storedEmail = localStorage.getItem('emailForOTP');
+    if (storedEmail) {
+      setEmail(storedEmail);
+    } else {
+      setError('Email not found. Redirecting to registration...');
+      setTimeout(() => navigate('/register'), 3000);
+    }
+  }, [navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!otp || otp.length < 4) {
-      setError('Please enter a valid verification code.');
+    setError('');
+
+    if (!otp || otp.length !== 4) {
+      setError('Please enter a valid 4-digit verification code.');
       return;
     }
-    console.log('🔐 OTP Code:', otp);
-    setError('');
-    // TODO: Send code to backend
+
+    try {
+      setLoading(true);
+
+      const response = await fetch('http://127.0.0.1:8000/users/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        const message = Array.isArray(err.detail)
+          ? err.detail.map(e => e.msg).join(', ')
+          : err.detail || 'Verification failed';
+        throw new Error(message);
+      }
+
+      localStorage.removeItem('emailForOTP');
+      navigate('/login');
+    } catch (err) {
+      console.error('OTP Verification Error:', err);
+      setError(err.message || 'Failed to verify account');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -42,10 +79,11 @@ const VerifyAccount = () => {
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
           />
-
           {error && <ErrorMessage message={error} />}
-
-          <SubmitButton label="Verify" />
+          <SubmitButton
+            label={loading ? 'Verifying...' : 'Verify'}
+            disabled={loading}
+          />
         </form>
       </div>
     </div>
