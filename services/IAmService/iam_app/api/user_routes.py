@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from iam_app.core.security import create_access_token
+from services.IAmService.iam_app.core.security import create_access_token
 from iam_app.crud import users as crud_users
 from iam_app.db import session as db_session
 from iam_app.db.models import OTP, User

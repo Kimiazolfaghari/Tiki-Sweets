@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from iam_app.core.security import verify_password
-from iam_app.db.models import Admin
+from services.IAmService.iam_app.core.security import verify_password
+from services.IAmService.iam_app.db.models import Admin
 
 
 def get_admin_by_email(db: Session, email: str):

@@ -1,6 +1,6 @@
-from core_app.db.base import Base
-from core_app.db.models import Shipment,SpecialCake,ShoppingList,ShoppingListItem,Product,RateComment,Order,City,Location,DiscountCode,OrderDetail,Payment,CoreUsers,CoreAdmins
-from core_app.db.session import engine
+from services.Core.core_app.db.base import Base
+from services.Core.core_app.db.models import Shipment,SpecialCake,ShoppingList,ShoppingListItem,Product,RateComment,Order,City,Location,DiscountCode,OrderDetail,Payment,CoreUsers,CoreAdmins
+from services.Core.core_app.db.session import engine
 
 
 __all__ = [

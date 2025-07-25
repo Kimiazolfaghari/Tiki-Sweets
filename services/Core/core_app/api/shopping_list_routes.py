@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from core_app.schemas import shopping_list_schemas as schemas
-from core_app.crud import shopping_list as crud
-from core_app.db.session import SessionLocal
-from core_app.core.security import get_current_user
+from services.Core.core_app.schemas import shopping_list_schemas as schemas
+from services.Core.core_app.crud import shopping_list as crud
+from services.Core.core_app.db.session import SessionLocal
+from services.Core.core_app.core.security import get_current_user
 
 router = APIRouter(
     prefix="/shoppinglists",

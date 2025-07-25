@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from iam_app.core.security import create_access_token
-from iam_app.crud import admin as crud_admin
-from iam_app.db.models import Admin
-from iam_app.db.session import SessionLocal
-from iam_app.schemas.admin_schemas import AdminLogin, AdminOut
+from services.IAmService.iam_app.core.security import create_access_token
+from services.IAmService.iam_app.crud import admin as crud_admin
+from services.IAmService.iam_app.db.models import Admin
+from services.IAmService.iam_app.db.session import SessionLocal
+from services.IAmService.iam_app.schemas.admin_schemas import AdminLogin, AdminOut
 
 admin_router = APIRouter()
 

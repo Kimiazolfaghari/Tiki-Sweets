@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import Union
 from jose import jwt
 from passlib.context import CryptContext
-from iam_app.core.config import settings
+from services.IAmService.iam_app.core.config import settings
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from core_app.db.models import City, Location
-from core_app.schemas.location_schemas import LocationCreate, LocationUpdate, CityCreate
+from services.Core.core_app.db.models import City, Location
+from services.Core.core_app.schemas.location_schemas import LocationCreate, LocationUpdate, CityCreate
 
 def create_city(db: Session, city: CityCreate):
     db_city = City(name=city.name)

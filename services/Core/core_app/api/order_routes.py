@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from core_app.schemas.order_schemas import OrderCreate, OrderOut
-from core_app.crud import order as crud_order
-from core_app.db.session import SessionLocal
-from core_app.core.security import get_current_user, get_current_admin
+from services.Core.core_app.schemas.order_schemas import OrderCreate, OrderOut
+from services.Core.core_app.crud import order as crud_order
+from services.Core.core_app.db.session import SessionLocal
+from services.Core.core_app.core.security import get_current_user, get_current_admin
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 

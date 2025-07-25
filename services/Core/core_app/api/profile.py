@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends,HTTPException
-from core_app.core.security import get_current_user,get_current_admin
-from core_app.iam_client import get_user_profile_from_iam, get_admin_profile_from_iam
+from services.Core.core_app.core.security import get_current_user,get_current_admin
+from services.Core.core_app.iam_client import get_user_profile_from_iam, get_admin_profile_from_iam
 
 profile_router = APIRouter()
 

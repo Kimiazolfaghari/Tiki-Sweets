@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from core_app.db.models import ShoppingList, ShoppingListItem, Product
-from core_app.schemas.shopping_list_schemas import ShoppingListCreate
+from services.Core.core_app.db.models import ShoppingList, ShoppingListItem, Product
+from services.Core.core_app.schemas.shopping_list_schemas import ShoppingListCreate
 
 def create_shopping_list(db: Session, shopping_list_data: ShoppingListCreate):
     shopping_list = ShoppingList(

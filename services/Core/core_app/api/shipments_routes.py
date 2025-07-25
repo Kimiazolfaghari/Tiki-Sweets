@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from core_app.schemas import shipment_schemas
-from core_app.crud import shipments as crud_shipment
-from core_app.db.session import  SessionLocal
-from core_app.core.security import get_current_admin  # فقط ادمین میتونه اینارو مدیریت کنه
+from services.Core.core_app.schemas import shipment_schemas
+from services.Core.core_app.crud import shipments as crud_shipment
+from services.Core.core_app.db.session import  SessionLocal
+from services.Core.core_app.core.security import get_current_admin  # فقط ادمین میتونه اینارو مدیریت کنه
 
 router = APIRouter(
     prefix="/shipments",

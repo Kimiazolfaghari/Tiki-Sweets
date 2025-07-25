@@ -2,16 +2,16 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
-from core_app.api.discount_routes import  router as dis_router
-from core_app.api.locations_routes import router as location_router
-from core_app.api.order_routes import router as order_router
-from core_app.api.payments_routes import router as payment_router
-from core_app.api.products_routes import router as products_router
-from core_app.api.ratings_routes import router as ratings_router
-from core_app.api.shopping_list_routes import router as  shopping_list_router
-from core_app.api.shipments_routes import router as shipment_router
-from core_app.api.special_cake import router as special_cake_router
-from core_app.api.profile import profile_router
+from services.Core.core_app.api.discount_routes import  router as dis_router
+from services.Core.core_app.api.locations_routes import router as location_router
+from services.Core.core_app.api.order_routes import router as order_router
+from services.Core.core_app.api.payments_routes import router as payment_router
+from services.Core.core_app.api.products_routes import router as products_router
+from services.Core.core_app.api.ratings_routes import router as ratings_router
+from services.Core.core_app.api.shopping_list_routes import router as  shopping_list_router
+from services.Core.core_app.api.shipments_routes import router as shipment_router
+from services.Core.core_app.api.special_cake import router as special_cake_router
+from services.Core.core_app.api.profile import profile_router
 
 
 app = FastAPI()

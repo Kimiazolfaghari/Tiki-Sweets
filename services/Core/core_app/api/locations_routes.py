@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from core_app.db.session import SessionLocal
-from core_app.schemas.location_schemas import (
+from services.Core.core_app.db.session import SessionLocal
+from services.Core.core_app.schemas.location_schemas import (
     CityCreate, CityOut, LocationCreate, LocationOut, LocationUpdate, CityBase)
-from core_app.crud import locations as crud_location
-from core_app.core.security import get_current_admin, get_current_user
+from services.Core.core_app.crud import locations as crud_location
+from services.Core.core_app.core.security import get_current_admin, get_current_user
 
 router = APIRouter(prefix="/locations", tags=["locations"])
 

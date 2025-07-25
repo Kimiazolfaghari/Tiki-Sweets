@@ -2,7 +2,7 @@ import enum
 from sqlalchemy import Boolean, Column, DateTime, Enum, Float, ForeignKey, String, Integer
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from core_app.db.base import Base
+from services.Core.core_app.db.base import Base
 
 class Product(Base):
     __tablename__ = "products"

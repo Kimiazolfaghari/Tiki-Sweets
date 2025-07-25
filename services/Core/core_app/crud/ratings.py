@@ -1,7 +1,7 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
-from core_app.db.models import RateComment,Product
-from core_app.schemas.rating_schemas import RateCommentCreate
+from services.Core.core_app.db.models import RateComment,Product
+from services.Core.core_app.schemas.rating_schemas import RateCommentCreate
 
 def create_rate_comment(db: Session, rate: RateCommentCreate):
     db_rate = RateComment(**rate.dict())

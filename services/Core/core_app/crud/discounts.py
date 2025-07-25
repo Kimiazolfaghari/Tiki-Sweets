@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from core_app.db.models import DiscountCode
-from core_app.schemas import discount_schemas
+from services.Core.core_app.db.models import DiscountCode
+from services.Core.core_app.schemas import discount_schemas
 from fastapi import HTTPException
 
 def create_discount(db: Session, discount: discount_schemas.DiscountCreate):

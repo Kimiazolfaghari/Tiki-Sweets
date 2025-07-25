@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from core_app.db.models import Shipment
-from core_app.schemas import shipment_schemas
+from services.Core.core_app.db.models import Shipment
+from services.Core.core_app.schemas import shipment_schemas
 
 def create_shipment(db: Session, shipment: shipment_schemas.ShipmentCreate):
     db_shipment = Shipment(**shipment.dict())

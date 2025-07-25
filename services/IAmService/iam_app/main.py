@@ -2,7 +2,6 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
-
 from iam_app.api.admin_routes import admin_router
 from iam_app.api.user_routes import router
 app = FastAPI()

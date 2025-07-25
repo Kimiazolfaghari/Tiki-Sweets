@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from core_app.schemas.payment_schemas import PaymentCreate, PaymentOut, PaymentUpdate
-from core_app.crud import payments as crud_payment
-from core_app.db.session import SessionLocal
-from core_app.core.security import get_current_user, get_current_admin
+from services.Core.core_app.schemas.payment_schemas import PaymentCreate, PaymentOut, PaymentUpdate
+from services.Core.core_app.crud import payments as crud_payment
+from services.Core.core_app.db.session import SessionLocal
+from services.Core.core_app.core.security import get_current_user, get_current_admin
 
 router = APIRouter(prefix="/payments", tags=["payments"])
 

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
-from core_app.schemas.rating_schemas import RateCommentCreate, RateCommentOut
-from core_app.crud import ratings as crud_rating
-from core_app.db.session import SessionLocal
-from core_app.core.security import get_current_user
+from services.Core.core_app.schemas.rating_schemas import RateCommentCreate, RateCommentOut
+from services.Core.core_app.crud import ratings as crud_rating
+from services.Core.core_app.db.session import SessionLocal
+from services.Core.core_app.core.security import get_current_user
 
 router = APIRouter(
     prefix="/ratings",

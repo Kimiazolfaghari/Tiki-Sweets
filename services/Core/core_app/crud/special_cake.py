@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from core_app.db.models import SpecialCake
-from core_app.schemas.special_cake import SpecialCakeCreate, SpecialCakeUpdateStatus
+from services.Core.core_app.db.models import SpecialCake
+from services.Core.core_app.schemas.special_cake import SpecialCakeCreate, SpecialCakeUpdateStatus
 from typing import List, Optional
 
 

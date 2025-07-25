@@ -5,7 +5,44 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c4b7521-1851-4bfa-a56a-eb3208a34336" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitingnore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Tiki-Sweets.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Tiki-Sweets.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/discount_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/discount_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/locations_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/locations_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/order_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/order_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/payments_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/payments_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/products_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/products_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/profile.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/profile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/ratings_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/ratings_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/shipments_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/shipments_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/shopping_list_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/shopping_list_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/api/special_cake.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/api/special_cake.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/core/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/core/security.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/create_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/create_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/discounts.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/discounts.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/locations.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/locations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/order.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/order.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/payments.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/payments.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/products.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/products.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/ratings.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/ratings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/shipments.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/shipments.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/shopping_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/shopping_list.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/crud/special_cake.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/crud/special_cake.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/db/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/db/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/db/session.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/db/session.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/Core/core_app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/Core/core_app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/api/admin_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/api/admin_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/api/token_verify.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/api/token_verify.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/api/user_routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/api/user_routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/core/dependencies.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/core/dependencies.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/core/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/core/security.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/create_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/create_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/crud/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/crud/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/db/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/db/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/db/session.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/db/session.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/IAmService/iam_app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/IAmService/iam_app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,11 +65,39 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Python.create_table.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/asus/PycharmProjects/Tiki-Sweets/.venv&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="Tiki-Sweets" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/services/IAmService/iam_app" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/services/IAmService/iam_app/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from jose import jwt, JWTError
 
-from iam_app.core.config import settings
+from services.IAmService.iam_app.core.config import settings
 
 
 router = APIRouter()

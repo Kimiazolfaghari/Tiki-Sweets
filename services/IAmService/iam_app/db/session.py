@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from iam_app.core.config import settings
+from services.IAmService.iam_app.core.config import settings
 
 DATABASE_URL = (
     f"postgresql://{settings.DATABASE_USER}:{settings.DATABASE_PASSWORD}"

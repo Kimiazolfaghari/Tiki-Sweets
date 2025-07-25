@@ -1,10 +1,11 @@
 from sqlalchemy import Boolean, Column, DateTime, String, Integer
 from sqlalchemy.sql import func
-from iam_app.db.base import Base
+from services.IAmService.iam_app.db.base import Base
 
 
 class OTP(Base):
     __tablename__ = "otp_codes"
+    __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, index=True, nullable=False)
@@ -14,6 +15,7 @@ class OTP(Base):
 
 class User(Base):
     __tablename__ = "users"
+    __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, index=True)
     full_name = Column(String, nullable=False)
@@ -27,6 +29,7 @@ class User(Base):
 
 class Admin(Base):
     __tablename__ = "admins"
+    __table_args__ = {"extend_existing": True}
 
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
