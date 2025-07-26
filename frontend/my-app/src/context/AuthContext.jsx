@@ -4,7 +4,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // { email, token }
+  const [user, setUser] = useState(null); 
 
   // خواندن توکن از localStorage در شروع برنامه
   useEffect(() => {
@@ -16,11 +16,13 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // ذخیره توکن و ایمیل پس از لاگین موفق
-  const login = ({ token, email }) => {
+  const login = ({ token, email, isAdmin }) => {
     localStorage.setItem('token', token);
     localStorage.setItem('email', email);
-    setUser({ token, email });
+    localStorage.setItem('isAdmin', isAdmin); 
+    setUser({ token, email, isAdmin }); 
   };
+
 
   // حذف اطلاعات در logout
   const logout = () => {

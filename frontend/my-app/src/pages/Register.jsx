@@ -21,7 +21,8 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -30,33 +31,38 @@ const Register = () => {
     setLoading(true);
 
     try {
+      const payload = {
+        full_name: `${form.firstName} ${form.lastName}`,
+        email: form.email,
+        password: form.password,
+        phone: form.phone,
+      };
+
       const response = await fetch('http://127.0.0.1:8000/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          full_name: `${form.firstName} ${form.lastName}`,
-          email: form.email,
-          password: form.password,
-          phone: form.phone,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.detail || 'Registration failed');
+        const errorMsg = Array.isArray(errorData.detail)
+          ? errorData.detail.map(e => e.msg).join(', ')
+          : errorData.detail || 'Registration failed';
+        throw new Error(errorMsg);
       }
 
-      // ✅ ذخیره ایمیل برای استفاده در صفحه Verify
+      // ✅ ذخیره ایمیل برای مرحله تأیید
       localStorage.setItem('emailForOTP', form.email);
 
       setLoading(false);
       navigate('/verify');
-
     } catch (err) {
+      console.error('Registration error:', err);
+      setError(err.message || 'Registration failed');
       setLoading(false);
-      setError(err.message || 'Registration error');
     }
   };
 

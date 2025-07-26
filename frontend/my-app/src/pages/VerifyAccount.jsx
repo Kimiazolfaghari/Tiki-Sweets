@@ -27,8 +27,13 @@ const VerifyAccount = () => {
     e.preventDefault();
     setError('');
 
-    if (!otp || otp.length !== 4) {
-      setError('Please enter a valid 4-digit verification code.');
+    if (!otp || otp.length !== 4 || isNaN(otp)) {
+      setError('Please enter a valid 4-digit numeric verification code.');
+      return;
+    }
+
+    if (!email) {
+      setError('Email is missing. Please register again.');
       return;
     }
 
@@ -38,21 +43,22 @@ const VerifyAccount = () => {
       const response = await fetch('http://127.0.0.1:8000/users/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp }),
+        body: JSON.stringify({ email, otp: otp.toString() }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const err = await response.json();
-        const message = Array.isArray(err.detail)
-          ? err.detail.map(e => e.msg).join(', ')
-          : err.detail || 'Verification failed';
+        const message = Array.isArray(data.detail)
+          ? data.detail.map(e => `${e.loc?.join('.') || ''}: ${e.msg}`).join(', ')
+          : data.detail || 'Verification failed';
+
         throw new Error(message);
       }
 
       localStorage.removeItem('emailForOTP');
-      navigate('/login');
+      navigate('/'); // ⬅ بعد از موفقیت، انتقال به صفحه اصلی
     } catch (err) {
-      console.error('OTP Verification Error:', err);
       setError(err.message || 'Failed to verify account');
     } finally {
       setLoading(false);
@@ -79,7 +85,9 @@ const VerifyAccount = () => {
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
           />
+
           {error && <ErrorMessage message={error} />}
+
           <SubmitButton
             label={loading ? 'Verifying...' : 'Verify'}
             disabled={loading}

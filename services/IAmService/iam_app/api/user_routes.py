@@ -1,10 +1,12 @@
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from services.IAmService.iam_app.core.security import create_access_token
+from iam_app.core.security import create_access_token, get_password_hash
 from iam_app.crud import users as crud_users
 from iam_app.db import session as db_session
 from iam_app.db.models import OTP, User
+from iam_app.deps import get_current_user
+from iam_app.schemas.otp_schemas import OTPRequest
 from iam_app.schemas.user_schemas import UserLogin, UserOut, UserRegister, UserUpdate
 from iam_app.utils.email_utils import send_otp_email, generate_otp
 from iam_app.crud.users import store_otp
@@ -56,8 +58,40 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
     }
 
 
+@router.get("/users/{user_id}", response_model=UserOut)
+def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+@router.put("/profile/{user_id}", response_model=UserOut)
+def update_user_profile(
+    user_id: int,
+    user_update: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if current_user.id != user_id and current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized to update this profile")
+
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    for field, value in user_update.dict(exclude_unset=True).items():
+        if field == "password":
+            value = get_password_hash(value)
+        setattr(db_user, field, value)
+
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
 @router.post("/users/verify-otp")
-def verify_otp(email: str, otp: str, db: Session = Depends(get_db), OTP_EXPIRATION_MINUTES:int=5):
+def verify_otp(payload: OTPRequest, db: Session = Depends(get_db), OTP_EXPIRATION_MINUTES: int = 5):
+    email = payload.email
+    otp = payload.otp
+
     db_otp = db.query(OTP).filter(OTP.email == email).order_by(OTP.created_at.desc()).first()
 
     if not db_otp or db_otp.otp != otp:
@@ -83,10 +117,3 @@ def verify_otp(email: str, otp: str, db: Session = Depends(get_db), OTP_EXPIRATI
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-
-@router.get("/users/{user_id}", response_model=UserOut)
-def get_user_profile(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user

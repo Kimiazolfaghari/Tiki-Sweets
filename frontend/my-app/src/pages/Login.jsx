@@ -24,41 +24,84 @@ const Login = () => {
     setForm({ ...form, [name]: type === 'checkbox' ? checked : value });
   };
 
+  const decodeToken = (token) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error("❌ Failed to decode token:", error);
+      return null;
+    }
+  };
+
+  const loginRequest = async (url) => {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: form.email,
+        password: form.password,
+      }),
+    });
+
+    const text = await res.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (err) {
+      throw new Error("Invalid response format from server");
+    }
+
+    if (!res.ok) {
+      throw new Error(data.detail || 'Login failed');
+    }
+
+    return data;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
-      });
+      let data;
+      let isAdmin = false;
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Login failed');
+      // First try normal user login
+      try {
+        data = await loginRequest('http://127.0.0.1:8000/users/login');
+      } catch (userErr) {
+        console.warn("🔁 User login failed, trying admin...");
+        data = await loginRequest('http://127.0.0.1:8000/admin/login');
+        isAdmin = true;
       }
 
-      const data = await response.json();
+      const decoded = decodeToken(data.access_token);
+      console.log("✅ Decoded Token:", decoded);
 
-      // ذخیره توکن در context و optional: localStorage
+      if (!decoded) throw new Error("Could not decode token");
+
+      // Use role from token (if available) instead of fallback
+      isAdmin = decoded?.role?.toLowerCase() === 'admin';
+
+
       login({
         token: data.access_token,
         email: form.email,
-        isAdmin: data.is_admin || false,
+        isAdmin,
       });
 
-      // انتقال به مسیر مناسب
-      navigate(data.is_admin ? '/admin' : '/');
+      navigate(isAdmin ? '/admin' : '/');
     } catch (err) {
-      console.error(err);
+      console.error("❌ Login error:", err);
       setError(err.message || 'Login error');
     } finally {
       setLoading(false);
